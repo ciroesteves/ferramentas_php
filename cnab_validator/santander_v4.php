@@ -1,7 +1,63 @@
 <?php
+$strTable = '';
+if (!empty($_POST['segmento_t'])) {
+    $dados = [
+        [1, 3, "N", "033", "Código do Banco na compensação"],
+        [4, 4, "N", "", "Número do lote retorno"],
+        [8, 1, "N", "3", "Tipo de registro"],
+        [9, 5, "N", "", "Nº sequencial do registro no lote"],
+        [14, 1, "A", "T", "Cód. segmento do registro detalhe"],
+        [15, 1, "A", "Brancos", "Reservado (uso Banco)"],
+        [16, 2, "A", "", "Código de movimento (ocorrência)"],
+        [18, 4, "N", "", "Agência do Beneficiário"],
+        [22, 1, "N", "", "Dígito da Agência do Beneficiário"],
+        [23, 9, "N", "", "Número da conta corrente"],
+        [32, 1, "N", "", "Dígito verificador da conta"],
+        [33, 8, "A", "Brancos", "Reservado (uso Banco)"],
+        [41, 13, "N", "Nosso Número", "Identificação do boleto no Banco"],
+        [54, 1, "A", "", "Código da carteira"],
+        [55, 15, "A", "Seu Número", "Nº do documento de cobrança"],
+        [70, 8, "N", "DDMMAAAA", "Data do vencimento do boleto"],
+        [78, 15, "N", "", "Valor nominal do boleto"],
+        [93, 3, "N", "", "Nº do Banco Cobrador / Recebedor"],
+        [96, 4, "N", "", "Agência Cobradora / Recebedora"],
+        [100, 1, "N", "", "Dígito da Agência do Beneficiário"],
+        [101, 25, "A", "", "Identif. do boleto na empresa"],
+        [126, 2, "N", "", "Código da moeda "],
+        [128, 1, "N", "", "Tipo de inscrição Pagador"],
+        [129, 15, "N", "", "Número de inscrição Pagador"],
+        [144, 40, "A", "", "Nome do Pagador"],
+        [184, 10, "A", "", "Conta Cobrança"],
+        [194, 15, "N", "", "Valor da Tarifa/Custas"],
+        [209, 10, "A", "", "Identificação para rejeições, tarifas, custas, liquidações, baixas e PIX."],
+        [219, 22, "A", "", "Reservado (uso Banco)"]
+    ];
 
-if (!empty($_FILES['arquivo']['tmp_name'])) {
-    echo "opa";
+    foreach ($dados as $dado) {
+        $pos = $dado[0] + $dado[1] - 1;
+        $trecho = substr($_POST['segmento_t'], $dado[0] - 1, $dado[1]);
+
+        $is_ok = "ERRO";
+        if($trecho == $dado[3]){
+            $is_ok = "OK";
+        }else if($dado[2] == "N" && $dado[3] == ""){
+            $is_ok = is_numeric($trecho) ? "OK" : "ERRO";
+        }else if($dado[2] == "A" && $dado[3] == ""){
+            $is_ok = "";
+        }else if($dado[3] == "Brancos" && empty(trim($trecho))){
+            $is_ok = "OK";
+        }
+
+        $strTable .= "<tr>
+        <td>{$trecho}</td> 
+        <td>{$dado[3]}</td>
+        <td>{$is_ok}</td>
+        <td>{$dado[2]}</td>
+        <td>{$dado[4]}</td>
+        <td>{$dado[0]}</td>
+        <td>{$pos}</td>
+    </tr>";
+    }
 }
 
 ?>
@@ -21,8 +77,8 @@ if (!empty($_FILES['arquivo']['tmp_name'])) {
             </div>
             <form action="santander_v4.php" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="arquivo">Arquivo:</label>
-                    <input type="file" id="arquivo" name="arquivo" accept=".csv, .txt">
+                    <label for="segmento_">Segmento :</label>
+                    <input type="text" id="segmento_" name="segmento_">
                 </div>
                 <input type="submit" value="Validar">
             </form>
@@ -34,14 +90,15 @@ if (!empty($_FILES['arquivo']['tmp_name'])) {
             </div>
             <form action="santander_v4.php" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="arquivo">Arquivo:</label>
-                    <input type="file" id="arquivo" name="arquivo" accept=".csv, .txt">
+                    <label for="segmento_t">Segmento T:</label>
+                    <input type="text" id="segmento_t" name="segmento_t" maxlength="240">
                 </div>
                 <input type="submit" value="Validar">
             </form>
         </div>
     </div>
     <div class="container" id="result">
+        <h1>Segmento T</h1>
         <table>
             <tr>
                 <th class="campo_maior">Trecho</th>
@@ -52,15 +109,9 @@ if (!empty($_FILES['arquivo']['tmp_name'])) {
                 <th>Pos_ini</th>
                 <th>Pos_fim</th>
             </tr>
-            <tr>
-                <td>Trecho</td>
-                <td>Padrão</td>
-                <td>OK</td>
-                <td>Tipo</td>
-                <td>Descrição</td>
-                <td>Pos_ini</td>
-                <td>Pos_fim</td>
-            </tr>
+            <?php
+            echo $strTable;
+            ?>
 
 
         </table>
@@ -68,24 +119,28 @@ if (!empty($_FILES['arquivo']['tmp_name'])) {
 </body>
 
 <style>
+    input {
+        width: 70%;
+    }
+
     table {
-  border-collapse: collapse;
-  width: 100%;
-}
+        border-collapse: collapse;
+        width: 100%;
+    }
 
-th, td {
-  border: 1px solid #ddd;
-  text-align: left;
-  padding: 8px;
-}
+    th,
+    td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
 
-th {
-  background-color: #f2f2f2;
-}
+    th {
+        background-color: #f2f2f2;
+    }
 
-tr:hover {
-  background-color: #f5f5f5;
-}
+    tr:hover {
+        background-color: #f5f5f5;
+    }
 
     .campo_maior {
         width: 450px;
