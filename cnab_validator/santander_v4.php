@@ -38,13 +38,13 @@ if (!empty($_POST['segmento_t'])) {
         $trecho = substr($_POST['segmento_t'], $dado[0] - 1, $dado[1]);
 
         $is_ok = "ERRO";
-        if($trecho == $dado[3]){
+        if ($trecho == $dado[3]) {
             $is_ok = "OK";
-        }else if($dado[2] == "N" && $dado[3] == ""){
+        } else if ($dado[2] == "N" && $dado[3] == "") {
             $is_ok = is_numeric($trecho) ? "OK" : "ERRO";
-        }else if($dado[2] == "A" && $dado[3] == ""){
+        } else if ($dado[2] == "A" && $dado[3] == "") {
             $is_ok = "";
-        }else if($dado[3] == "Brancos" && empty(trim($trecho))){
+        } else if ($dado[3] == "Brancos" && empty(trim($trecho))) {
             $is_ok = "OK";
         }
 
@@ -58,6 +58,9 @@ if (!empty($_POST['segmento_t'])) {
         <td>{$pos}</td>
     </tr>";
     }
+    
+}else{
+    $strTable .= "<tr><td>Não há informações.</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
 }
 
 ?>
@@ -65,33 +68,69 @@ if (!empty($_POST['segmento_t'])) {
 
 <head>
     <meta charset="UTF=8" />
-    <title>Form Arquivo</title>
+    <title>Validador</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.min.css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
 </head>
 
 <body>
-    <div class="row" id="forms">
+    <div class="slick-carousel">
         <div class="container">
-            <div>
-                <h1 class="col-md-6">Santander v4</h1>
-                <h3 align="center">CNAB Remessa</h3>
-            </div>
+            <h1>Santander v4 - Header/Trailer</h1>
             <form action="santander_v4.php" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="segmento_">Segmento :</label>
-                    <input type="text" id="segmento_" name="segmento_">
+                    <label class="col-md-2" align="left" for="header">Header Arquivo</label>
+                    <input class="col-md-6" type="text" id="header" name="header" maxlength="240">
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2" align="left" for="header_lote">Header Lote</label>
+                    <input class="col-md-6" type="text" id="header_lote" name="header_lote" maxlength="240">
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-2" align="left" for="trailer_lote">Trailer Lote</label>
+                    <input class="col-md-6" type="text" id="trailer_lote" name="trailer_lote" maxlength="240">
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2" align="left" for="trailer">Trailer Arquivo</label>
+                    <input class="col-md-6" type="text" id="trailer" name="trailer" maxlength="240">
                 </div>
                 <input type="submit" value="Validar">
             </form>
         </div>
         <div class="container">
-            <div>
-                <h1 class="col-md-6">Santander v4</h1>
-                <h3 align="center">CNAB Retorno</h3>
-            </div>
+            <h1>Santander v4 - Remessa</h1>
             <form action="santander_v4.php" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="segmento_t">Segmento T:</label>
+                    <label for="segmento_p">Segmento P</label>
+                    <input type="text" id="segmento_p" name="segmento_p">
+                </div>
+                <div class="form-group">
+                    <label for="segmento_q">Segmento Q</label>
+                    <input type="text" id="segmento_q" name="segmento_q">
+                </div>
+                <div class="form-group">
+                    <label for="segmento_r">Segmento R</label>
+                    <input type="text" id="segmento_r" name="segmento_r">
+                </div>
+                <div class="form-group">
+                    <label for="segmento_s">Segmento S</label>
+                    <input type="text" id="segmento_s" name="segmento_s">
+                </div>
+                <input type="submit" value="Validar">
+            </form>
+        </div>
+        <div class="container">
+            <h1>Santander v4 - Retorno</h1>
+            <form action="santander_v4.php" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="segmento_t">Segmento T</label>
                     <input type="text" id="segmento_t" name="segmento_t" maxlength="240">
+                </div>
+                <div class="form-group">
+                    <label for="segmento_u">Segmento U</label>
+                    <input type="text" id="segmento_u" name="segmento_u" maxlength="240">
                 </div>
                 <input type="submit" value="Validar">
             </form>
@@ -118,7 +157,57 @@ if (!empty($_POST['segmento_t'])) {
     </div>
 </body>
 
+<script>
+    $(document).ready(function() {
+        $('.slick-carousel').slick({
+            dots: false,
+            infinite: true,
+            speed: 300,
+            prevArrow: '<button type="button" class="slick-prev">Previous</button>',
+            nextArrow: '<button type="button" class="slick-next">Next</button>',
+            slidesToShow: 1,
+            slidesToScroll: 1,
+        });
+    });
+</script>
+
 <style>
+    label {
+        text-align: left;
+        display: block;
+        margin-bottom: 0.2rem;
+        margin-left: 10%;
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: #333;
+    }
+
+    input[type="text"] {
+        display: block;
+        margin: auto;
+        width: 80%;
+        font-size: 1rem;
+        color: #555;
+        background-color: #fff;
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    }
+
+    input[type="text"]:focus {
+        outline: none;
+        border-color: #4d90fe;
+        box-shadow: 0 0 0 0.2rem rgba(77, 144, 254, 0.25);
+    }
+
+    .slick-carousel {
+        width: 45%;
+        height: 50%;
+        margin: 20px auto;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
     input {
         width: 70%;
     }
@@ -147,8 +236,9 @@ if (!empty($_POST['segmento_t'])) {
     }
 
     #result {
-        width: 90%;
+        width: 95%;
         height: auto;
+        margin: 20px auto;
     }
 
     #forms {
@@ -156,9 +246,7 @@ if (!empty($_POST['segmento_t'])) {
     }
 
     .container {
-        width: 750px;
-        margin: 20px auto;
-        padding: 20px;
+        width: 45%;
         background-color: #f9f9f9;
         border-radius: 5px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -172,6 +260,10 @@ if (!empty($_POST['segmento_t'])) {
 
     form {
         text-align: center;
+    }
+
+    .form-group {
+        margin-top: 5px;
     }
 
     input[type="submit"],
@@ -190,5 +282,9 @@ if (!empty($_POST['segmento_t'])) {
 
     input[type="submit"]:hover {
         background-color: #3e8e41;
+    }
+
+    body {
+        background-color: red;
     }
 </style>
