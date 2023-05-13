@@ -1,5 +1,5 @@
 <?php
-$strTableT = $strTableU = '';
+$strTableT = $strTableU = $strTableHeader = '';
 if (!empty($_POST['segmento_t'])) {
     $dados = [
         [1,     3,  "N", "033",         "Código do Banco na compensação"],
@@ -30,7 +30,7 @@ if (!empty($_POST['segmento_t'])) {
         [184,   10, "A", "",            "Conta Cobrança"],
         [194,   15, "N", "",            "Valor da Tarifa/Custas"],
         [209,   10, "A", "",            "Identificação para rejeições, tarifas, custas, liquidações, baixas e PIX."],
-        [219,   22, "A", "Brancos",            "Reservado (uso Banco)"]
+        [219,   22, "A", "Brancos",     "Reservado (uso Banco)"]
     ];
 
     foreach ($dados as $dado) {
@@ -111,10 +111,103 @@ if (!empty($_POST['segmento_u'])) {
         <td>{$pos}</td>
     </tr>";
     }
-} else {
-    $strTableT .= "<tr><td>Não há informações.</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
 }
+if (!empty($_POST['header'])) {
+    $dados = [
+        [1,     3,      "N",    "033",      "Código do Banco na compensação"],
+        [4,     4,      "N",    "0000",     "Lote de serviço "],
+        [8,     1,      "N",    "0",        "Tipo de registro"],
+        [9,     8,      "A",    "",         "Reservado (uso do banco)"],
+        [17,    1,      "N",    "",         "Tipo de inscrição da empresa"],
+        [18,    15,     "N",    "",         "Número de inscrição da empresa"],
+        [33,    15,     "N",    "",         "Código de transmissão"],
+        [48,    25,     "A",    "Brancos",  "Reservado (uso do banco)"],
+        [73,    30,     "A",    "",         "Nome da empresa"],
+        [103,   30,     "A",    "Banco Santander",  "Nome do Banco"],
+        [133,   10,     "A",    "Brancos",          "Reservado (uso do banco)"],
+        [143,   1,      "N",    "1",                "Código Remessa"],
+        [144,   8,      "N",    "DDMMAAAA",         "Data da geração do arquivo"],
+        [152,   6,      "A",    "Brancos",          "Reservado (uso do banco)"],
+        [158,   6,      "N",    "",                 "Número sequencial do arquivo"],
+        [164,   3,      "N",    "040",              "Versão do layout do arquivo"],
+        [167,   74,     "A",    "Brancos",          "Reservado (uso do banco)"]
 
+    ];
+
+    foreach ($dados as $dado) {
+        $pos = $dado[0] + $dado[1] - 1;
+        $trecho = substr($_POST['header'], $dado[0] - 1, $dado[1]);
+
+        $is_ok = "ERRO";
+        if ($trecho == $dado[3]) {
+            $is_ok = "OK";
+        } else if ($dado[2] == "N" && $dado[3] == "") {
+            $is_ok = is_numeric($trecho) ? "OK" : "ERRO";
+        } else if ($dado[2] == "A" && $dado[3] == "") {
+            $is_ok = "";
+        } else if ($dado[3] == "Brancos" && empty(trim($trecho))) {
+            $is_ok = "OK";
+        }
+
+        $strTableHeader .= "<tr>
+        <td>{$trecho}</td> 
+        <td>{$dado[3]}</td>
+        <td>{$is_ok}</td>
+        <td>{$dado[2]}</td>
+        <td>{$dado[4]}</td>
+        <td>{$dado[0]}</td>
+        <td>{$pos}</td>
+    </tr>";
+    }
+}
+if (!empty($_POST['header_lote'])) {
+    $dados = [
+        [1,     3,      "N",    "033",      "Código do Banco na compensação"],
+        [4,     4,      "N",    "0000",     "Lote de serviço "],
+        [8,     1,      "N",    "0",        "Tipo de registro"],
+        [9,     8,      "A",    "",         "Reservado (uso do banco)"],
+        [17,    1,      "N",    "",         "Tipo de inscrição da empresa"],
+        [18,    15,     "N",    "",         "Número de inscrição da empresa"],
+        [33,    15,     "N",    "",         "Código de transmissão"],
+        [48,    25,     "A",    "Brancos",  "Reservado (uso do banco)"],
+        [73,    30,     "A",    "",         "Nome da empresa"],
+        [103,   30,     "A",    "Banco Santander",  "Nome do Banco"],
+        [133,   10,     "A",    "Brancos",          "Reservado (uso do banco)"],
+        [143,   1,      "N",    "1",                "Código Remessa"],
+        [144,   8,      "N",    "DDMMAAAA",         "Data da geração do arquivo"],
+        [152,   6,      "A",    "Brancos",          "Reservado (uso do banco)"],
+        [158,   6,      "N",    "",                 "Número sequencial do arquivo"],
+        [164,   3,      "N",    "040",              "Versão do layout do arquivo"],
+        [167,   74,     "A",    "Brancos",          "Reservado (uso do banco)"]
+
+    ];
+
+    foreach ($dados as $dado) {
+        $pos = $dado[0] + $dado[1] - 1;
+        $trecho = substr($_POST['header_lote'], $dado[0] - 1, $dado[1]);
+
+        $is_ok = "ERRO";
+        if ($trecho == $dado[3]) {
+            $is_ok = "OK";
+        } else if ($dado[2] == "N" && $dado[3] == "") {
+            $is_ok = is_numeric($trecho) ? "OK" : "ERRO";
+        } else if ($dado[2] == "A" && $dado[3] == "") {
+            $is_ok = "";
+        } else if ($dado[3] == "Brancos" && empty(trim($trecho))) {
+            $is_ok = "OK";
+        }
+
+        $strTableHeaderLote .= "<tr>
+        <td>{$trecho}</td> 
+        <td>{$dado[3]}</td>
+        <td>{$is_ok}</td>
+        <td>{$dado[2]}</td>
+        <td>{$dado[4]}</td>
+        <td>{$dado[0]}</td>
+        <td>{$pos}</td>
+    </tr>";
+    }
+}
 ?>
 <html>
 
@@ -130,7 +223,7 @@ if (!empty($_POST['segmento_u'])) {
 <body>
     <div class="slick-carousel">
         <div class="container">
-            <h1>Santander v4 - Header/Trailer</h1>
+            <h1>Santander v4 - Header/Trailer Remessa</h1>
             <form action="santander_v4.php" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <label class="col-md-2" align="left" for="header">Header Arquivo</label>
@@ -190,7 +283,7 @@ if (!empty($_POST['segmento_u'])) {
     </div>
     <?php
     if (!empty($_POST['segmento_t'])) {
-        echo "<div class='container' id='result'>
+        echo "<div class='container result'>
         <h1>Segmento T</h1>
         <table>
             <tr>
@@ -205,10 +298,10 @@ if (!empty($_POST['segmento_u'])) {
             <?php
             {$strTableT}
         </table>
-    </div>";
+        </div>";
     }
-    if ($_POST['segmento_u']) {
-        echo "<div class='container' id='result'>
+    if (!empty($_POST['segmento_u'])) {
+        echo "<div class='container result'>
         <h1>Segmento U</h1>
         <table>
             <tr>
@@ -223,7 +316,25 @@ if (!empty($_POST['segmento_u'])) {
             <?php
             {$strTableU}
         </table>
-    </div>";
+        </div>";
+    }
+    if (!empty($_POST['header'])) {
+        echo "<div class='container result'>
+        <h1>Header</h1>
+        <table>
+            <tr>
+                <th class='campo_maior'>Trecho</th>
+                <th class='campo_maior'>Padrão</th>
+                <th>?</th>
+                <th>Tipo</th>
+                <th class='campo_maior'>Descrição</th>
+                <th>Pos_ini</th>
+                <th>Pos_fim</th>
+            </tr>
+            <?php
+            {$strTableHeader}
+        </table>
+        </div>";
     }
     ?>
 </body>
@@ -305,11 +416,7 @@ if (!empty($_POST['segmento_u'])) {
         width: 450px;
     }
 
-    #result {
-        width: 95%;
-        height: auto;
-        margin: 20px auto;
-    }
+    
 
     #forms {
         display: flex;
@@ -356,6 +463,11 @@ if (!empty($_POST['segmento_u'])) {
 
     body {
         background-color: red;
+    }
+    .result {
+        width: 95%;
+        height: auto;
+        margin: 20px auto;
     }
 </style>
 
