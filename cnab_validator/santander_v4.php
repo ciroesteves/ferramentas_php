@@ -1,36 +1,36 @@
 <?php
-$strTable = '';
+$strTableT = $strTableU = '';
 if (!empty($_POST['segmento_t'])) {
     $dados = [
-        [1, 3, "N", "033", "Código do Banco na compensação"],
-        [4, 4, "N", "", "Número do lote retorno"],
-        [8, 1, "N", "3", "Tipo de registro"],
-        [9, 5, "N", "", "Nº sequencial do registro no lote"],
-        [14, 1, "A", "T", "Cód. segmento do registro detalhe"],
-        [15, 1, "A", "Brancos", "Reservado (uso Banco)"],
-        [16, 2, "A", "", "Código de movimento (ocorrência)"],
-        [18, 4, "N", "", "Agência do Beneficiário"],
-        [22, 1, "N", "", "Dígito da Agência do Beneficiário"],
-        [23, 9, "N", "", "Número da conta corrente"],
-        [32, 1, "N", "", "Dígito verificador da conta"],
-        [33, 8, "A", "Brancos", "Reservado (uso Banco)"],
-        [41, 13, "N", "Nosso Número", "Identificação do boleto no Banco"],
-        [54, 1, "A", "", "Código da carteira"],
-        [55, 15, "A", "Seu Número", "Nº do documento de cobrança"],
-        [70, 8, "N", "DDMMAAAA", "Data do vencimento do boleto"],
-        [78, 15, "N", "", "Valor nominal do boleto"],
-        [93, 3, "N", "", "Nº do Banco Cobrador / Recebedor"],
-        [96, 4, "N", "", "Agência Cobradora / Recebedora"],
-        [100, 1, "N", "", "Dígito da Agência do Beneficiário"],
-        [101, 25, "A", "", "Identif. do boleto na empresa"],
-        [126, 2, "N", "", "Código da moeda "],
-        [128, 1, "N", "", "Tipo de inscrição Pagador"],
-        [129, 15, "N", "", "Número de inscrição Pagador"],
-        [144, 40, "A", "", "Nome do Pagador"],
-        [184, 10, "A", "", "Conta Cobrança"],
-        [194, 15, "N", "", "Valor da Tarifa/Custas"],
-        [209, 10, "A", "", "Identificação para rejeições, tarifas, custas, liquidações, baixas e PIX."],
-        [219, 22, "A", "", "Reservado (uso Banco)"]
+        [1,     3,  "N", "033",         "Código do Banco na compensação"],
+        [4,     4,  "N", "",            "Número do lote retorno"],
+        [8,     1,  "N", "3",           "Tipo de registro"],
+        [9,     5,  "N", "",            "Nº sequencial do registro no lote"],
+        [14,    1,  "A", "T",           "Cód. segmento do registro detalhe"],
+        [15,    1,  "A", "Brancos",     "Reservado (uso Banco)"],
+        [16,    2,  "A", "",            "Código de movimento (ocorrência)"],
+        [18,    4,  "N", "",            "Agência do Beneficiário"],
+        [22,    1,  "N", "",            "Dígito da Agência do Beneficiário"],
+        [23,    9,  "N", "",            "Número da conta corrente"],
+        [32,    1,  "N", "",            "Dígito verificador da conta"],
+        [33,    8,  "A", "Brancos",     "Reservado (uso Banco)"],
+        [41,    13, "N", "Nosso Número","Identificação do boleto no Banco"],
+        [54,    1,  "A", "",             "Código da carteira"],
+        [55,    15, "A", "Seu Número",  "Nº do documento de cobrança"],
+        [70,    8,  "N", "DDMMAAAA",    "Data do vencimento do boleto"],
+        [78,    15, "N", "",            "Valor nominal do boleto"],
+        [93,    3,  "N", "",            "Nº do Banco Cobrador / Recebedor"],
+        [96,    4,  "N", "",            "Agência Cobradora / Recebedora"],
+        [100,   1,  "N", "",            "Dígito da Agência do Beneficiário"],
+        [101,   25, "A", "",            "Identif. do boleto na empresa"],
+        [126,   2,  "N", "",            "Código da moeda "],
+        [128,   1,  "N", "",            "Tipo de inscrição Pagador"],
+        [129,   15, "N", "",            "Número de inscrição Pagador"],
+        [144,   40, "A", "",            "Nome do Pagador"],
+        [184,   10, "A", "",            "Conta Cobrança"],
+        [194,   15, "N", "",            "Valor da Tarifa/Custas"],
+        [209,   10, "A", "",            "Identificação para rejeições, tarifas, custas, liquidações, baixas e PIX."],
+        [219,   22, "A", "Brancos",            "Reservado (uso Banco)"]
     ];
 
     foreach ($dados as $dado) {
@@ -48,7 +48,7 @@ if (!empty($_POST['segmento_t'])) {
             $is_ok = "OK";
         }
 
-        $strTable .= "<tr>
+        $strTableT .= "<tr>
         <td>{$trecho}</td> 
         <td>{$dado[3]}</td>
         <td>{$is_ok}</td>
@@ -58,9 +58,61 @@ if (!empty($_POST['segmento_t'])) {
         <td>{$pos}</td>
     </tr>";
     }
-    
-}else{
-    $strTable .= "<tr><td>Não há informações.</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
+}
+if (!empty($_POST['segmento_u'])) {
+    $dados = [
+        [1,     3,      "N",    "033",      "Código do Banco na compensação"],
+        [4,     4,      "N",    "",         "Lote de serviço"],
+        [8,     1,      "N",    "3",        "Tipo de registro"],
+        [9,     5,      "N",    "",         "Nº sequencial do registro no lote"],
+        [14,    1,      "A",    "U",        "Cód. segmento do registro detalhe"],
+        [15,    1,      "A",    "Brancos",  "Reservado (uso Banco)"],
+        [16,    2,      "N",    "",         "Código de movimento (ocorrência)"],
+        [18,    15,     "N",    "",         "Juros / Multa / Encargos"],
+        [33,    15,     "N",    "",         "Valor do desconto concedido"],
+        [48,    15,     "N",    "",         "Valor do Abatimento Concedido/Cancelado"],
+        [63,    15,     "N",    "",         "Valor do IOF recolhido"],
+        [78,    15,     "N",    "",         "Valor pago pelo Pagador"],
+        [93,    15,     "N",    "",         "Valor liquido a ser creditado"],
+        [108,   15,     "N",    "",         "Valor de outras despesas"],
+        [123,   15,     "N",    "",         "Valor de outros créditos"],
+        [138,   8,      "N",    "DDMMAAAA", "Data da ocorrência"],
+        [146,   8,      "N",    "DDMMAAAA", "Data da efetivação do crédito"],
+        [154,   4,      "N",    "",         "Código da ocorrência do Pagador"],
+        [158,   8,      "N",    "DDMMAAAA", "Data da ocorrência do Pagador"],
+        [166,   15,     "N",    "",         "Valor da ocorrência do Pagador"],
+        [181,   30,     "A",    "",         "Complemento da ocorrência do Pagador"],
+        [211,   3,      "N",    "",         "Código do Banco correspondente compens."],
+        [214,   27,     "A",    "Brancos",  "Reservado"]
+    ];
+
+    foreach ($dados as $dado) {
+        $pos = $dado[0] + $dado[1] - 1;
+        $trecho = substr($_POST['segmento_u'], $dado[0] - 1, $dado[1]);
+
+        $is_ok = "ERRO";
+        if ($trecho == $dado[3]) {
+            $is_ok = "OK";
+        } else if ($dado[2] == "N" && $dado[3] == "") {
+            $is_ok = is_numeric($trecho) ? "OK" : "ERRO";
+        } else if ($dado[2] == "A" && $dado[3] == "") {
+            $is_ok = "";
+        } else if ($dado[3] == "Brancos" && empty(trim($trecho))) {
+            $is_ok = "OK";
+        }
+
+        $strTableU .= "<tr>
+        <td>{$trecho}</td> 
+        <td>{$dado[3]}</td>
+        <td>{$is_ok}</td>
+        <td>{$dado[2]}</td>
+        <td>{$dado[4]}</td>
+        <td>{$dado[0]}</td>
+        <td>{$pos}</td>
+    </tr>";
+    }
+} else {
+    $strTableT .= "<tr><td>Não há informações.</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>";
 }
 
 ?>
@@ -136,27 +188,45 @@ if (!empty($_POST['segmento_t'])) {
             </form>
         </div>
     </div>
-    <div class="container" id="result">
+    <?php
+    if (!empty($_POST['segmento_t'])) {
+        echo "<div class='container' id='result'>
         <h1>Segmento T</h1>
         <table>
             <tr>
-                <th class="campo_maior">Trecho</th>
-                <th class="campo_maior">Padrão</th>
+                <th class='campo_maior'>Trecho</th>
+                <th class='campo_maior'>Padrão</th>
                 <th>?</th>
                 <th>Tipo</th>
-                <th class="campo_maior">Descrição</th>
+                <th class='campo_maior'>Descrição</th>
                 <th>Pos_ini</th>
                 <th>Pos_fim</th>
             </tr>
             <?php
-            echo $strTable;
-            ?>
-
-
+            {$strTableT}
         </table>
-    </div>
+    </div>";
+    }
+    if ($_POST['segmento_u']) {
+        echo "<div class='container' id='result'>
+        <h1>Segmento U</h1>
+        <table>
+            <tr>
+                <th class='campo_maior'>Trecho</th>
+                <th class='campo_maior'>Padrão</th>
+                <th>?</th>
+                <th>Tipo</th>
+                <th class='campo_maior'>Descrição</th>
+                <th>Pos_ini</th>
+                <th>Pos_fim</th>
+            </tr>
+            <?php
+            {$strTableU}
+        </table>
+    </div>";
+    }
+    ?>
 </body>
-
 <script>
     $(document).ready(function() {
         $('.slick-carousel').slick({
@@ -288,3 +358,5 @@ if (!empty($_POST['segmento_t'])) {
         background-color: red;
     }
 </style>
+
+</html>
