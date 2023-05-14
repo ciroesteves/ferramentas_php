@@ -1,7 +1,20 @@
 <?php
-$strTableT = $strTableU = $strTableHeader = $strTableHeaderLote = $strTableTrailer = $strTableTrailerLote =  '';
-function geraTabela($dados, $linha){
-    $str = "";
+$strTableHeader             = $strTableHeaderLote   = $strTableTrailer          =
+    $strTableTrailerLote    = $strTableP            = $strTableQ                =
+    $strTableR              = $strTableS            =  $strTableT               =
+    $strTableU              =  '';
+
+function geraTabela($dados, $linha) {
+    $str = "<table>
+                <tr>
+                    <th class='campo_maior'>Trecho</th>
+                    <th class='campo_maior'>Padrão</th>
+                    <th>?</th>
+                    <th>Tipo</th>
+                    <th class='campo_maior'>Descrição</th>
+                    <th>Pos_ini</th>
+                    <th>Pos_fim</th>
+                </tr>";
     foreach ($dados as $dado) {
         $pos = $dado[0] + $dado[1] - 1;
         $trecho = substr($linha, $dado[0] - 1, $dado[1]);
@@ -18,18 +31,93 @@ function geraTabela($dados, $linha){
         }
 
         $str .= "<tr>
-        <td>{$trecho}</td> 
-        <td>{$dado[3]}</td>
-        <td>{$is_ok}</td>
-        <td>{$dado[2]}</td>
-        <td>{$dado[4]}</td>
-        <td>{$dado[0]}</td>
-        <td>{$pos}</td>
-    </tr>";
+                    <td>{$trecho}</td> 
+                    <td>{$dado[3]}</td>
+                    <td>{$is_ok}</td>
+                    <td>{$dado[2]}</td>
+                    <td>{$dado[4]}</td>
+                    <td>{$dado[0]}</td>
+                    <td>{$pos}</td>
+                </tr>";
     }
+    $str .= "</table>";
     return $str;
 }
 
+if (!empty($_POST['header'])) {
+    $dados = [
+        [1,     3,      "N",    "033",      "Código do Banco na compensação"],
+        [4,     4,      "N",    "0000",     "Lote de serviço "],
+        [8,     1,      "N",    "0",        "Tipo de registro"],
+        [9,     8,      "A",    "",         "Reservado (uso do banco)"],
+        [17,    1,      "N",    "",         "Tipo de inscrição da empresa"],
+        [18,    15,     "N",    "",         "Número de inscrição da empresa"],
+        [33,    15,     "N",    "",         "Código de transmissão"],
+        [48,    25,     "A",    "Brancos",  "Reservado (uso do banco)"],
+        [73,    30,     "A",    "",         "Nome da empresa"],
+        [103,   30,     "A",    "Banco Santander",  "Nome do Banco"],
+        [133,   10,     "A",    "Brancos",          "Reservado (uso do banco)"],
+        [143,   1,      "N",    "1",                "Código Remessa"],
+        [144,   8,      "N",    "DDMMAAAA",         "Data da geração do arquivo"],
+        [152,   6,      "A",    "Brancos",          "Reservado (uso do banco)"],
+        [158,   6,      "N",    "",                 "Número sequencial do arquivo"],
+        [164,   3,      "N",    "040",              "Versão do layout do arquivo"],
+        [167,   74,     "A",    "Brancos",          "Reservado (uso do banco)"]
+
+    ];
+
+    $strTableHeader = geraTabela($dados, $_POST['header']);
+}
+if (!empty($_POST['header_lote'])) {
+    $dados = [
+        [1,     3,      "N",    "033",      "Código do Banco na compensação"],
+        [4,     4,      "N",    "",         "Número do lote de serviço "],
+        [8,     1,      "N",    "1",        "Tipo de registro"],
+        [9,     1,      "A",    "R",        "Tipo de operação"],
+        [10,    2,      "N",    "01",       "Tipo de serviço"],
+        [12,    2,      "A",    "Brancos",  "Reservado (uso do banco)"],
+        [14,    3,      "N",    "040",      "Nº da versão do layout do lote"],
+        [17,    1,      "A",    "Brancos",  "Reservado (uso do banco)"],
+        [18,    1,      "N",    "",         "Tipo de inscrição da empresa"],
+        [19,    15,     "N",    "",         "Nº de inscrição da empresa"],
+        [34,    20,     "A",    "Brancos",  "Reservado (uso do banco)"],
+        [54,    15,     "N",    "",         "Código de transmissão"],
+        [69,    5,      "A",    "Brancos",  "Reservado (uso do banco)"],
+        [74,    30,     "A",    "",         "Nome do beneficiário"],
+        [104,   40,     "A",    "",         "Mensagem 1"],
+        [144,   40,     "A",    "",         "Mensagem 2"],
+        [184,   8,      "N",    "",         "Número remessa"],
+        [192,   8,      "N",    "DDMMAAAA", "Data da gravação da remessa"],
+        [200,   41,     "A",    "Brancos",  "Reservado (uso do banco)"]
+    ];
+
+    $strTableHeaderLote = geraTabela($dados, $_POST['header_lote']);
+}
+if (!empty($_POST['trailer_lote'])) {
+    $dados = [
+        [1,     3,      "N",    "033",      "Código do Banco na compensação"],
+        [4,     4,      "N",    "",         "Número do lote de remessa"],
+        [8,     1,      "N",    "5",        "Tipo de registro"],
+        [9,     9,      "A",    "Brancos",  "Reservado (uso do banco)"],
+        [18,    6,      "N",    "",         "Quantidade de registros do lote"],
+        [24,    217,    "A",    "Brancos",  "Reservado (uso do banco)"]
+    ];
+
+    $strTableTrailerLote = geraTabela($dados, $_POST['trailer_lote']);
+}
+if (!empty($_POST['trailer'])) {
+    $dados = [
+        [1,     3,      "N",    "033",      "Código do Banco na compensação"],
+        [4,     4,      "N",    "",         "Número da remessa"],
+        [8,     1,      "N",    "9",        "Tipo de registro"],
+        [9,     9,      "A",    "Brancos",  "Reservado (uso do banco)"],
+        [18,    6,      "N",    "",         "Quantidade de lotes do arquivo"],
+        [24,    6,      "N",    "",         "Quantidade de registros do arquivo"],
+        [30,    211,    "A",    "Brancos",  "Reservado (uso do banco)"]
+    ];
+
+    $strTableTrailer = geraTabela($dados, $_POST['trailer']);
+}
 if (!empty($_POST['segmento_t'])) {
     $dados = [
         [1,     3,  "N", "033",         "Código do Banco na compensação"],
@@ -93,80 +181,88 @@ if (!empty($_POST['segmento_u'])) {
 
     $strTableU = geraTabela($dados, $_POST['segmento_u']);
 }
-if (!empty($_POST['header'])) {
+if (!empty($_POST['segmento_p'])) {
     $dados = [
-        [1,     3,      "N",    "033",      "Código do Banco na compensação"],
-        [4,     4,      "N",    "0000",     "Lote de serviço "],
-        [8,     1,      "N",    "0",        "Tipo de registro"],
-        [9,     8,      "A",    "",         "Reservado (uso do banco)"],
-        [17,    1,      "N",    "",         "Tipo de inscrição da empresa"],
-        [18,    15,     "N",    "",         "Número de inscrição da empresa"],
-        [33,    15,     "N",    "",         "Código de transmissão"],
-        [48,    25,     "A",    "Brancos",  "Reservado (uso do banco)"],
-        [73,    30,     "A",    "",         "Nome da empresa"],
-        [103,   30,     "A",    "Banco Santander",  "Nome do Banco"],
-        [133,   10,     "A",    "Brancos",          "Reservado (uso do banco)"],
-        [143,   1,      "N",    "1",                "Código Remessa"],
-        [144,   8,      "N",    "DDMMAAAA",         "Data da geração do arquivo"],
-        [152,   6,      "A",    "Brancos",          "Reservado (uso do banco)"],
-        [158,   6,      "N",    "",                 "Número sequencial do arquivo"],
-        [164,   3,      "N",    "040",              "Versão do layout do arquivo"],
-        [167,   74,     "A",    "Brancos",          "Reservado (uso do banco)"]
-
+        [1,     3,      "N",    "033",          "Código do Banco na compensação"],
+        [4,     4,      "N",    "",             "Número do lote remessa"],
+        [8,     1,      "N",    "3",            "Tipo de registro"],
+        [9,     5,      "N",    "",             "Nº sequencial do registro no lote"],
+        [14,    1,      "A",    "P",            "Cód. segmento do registro detalhe"],
+        [15,    1,      "A",    "Brancos",      "Reservado (uso Banco)"],
+        [16,    2,      "N",    "",             "Código de movimento remessa"],
+        [18,    4,      "N",    "",             "Agência do Destinatário"],
+        [22,    1,      "N",    "",             "Dígito da Ag do Destinatário"],
+        [23,    9,      "N",    "",             "Número da conta corrente"],
+        [32,    1,      "N",    "",             "Dígito verificador da conta"],
+        [33,    9,      "N",    "",             "Conta cobrança destinatária FIDC"],
+        [42,    1,      "N",    "",             "Dígito da conta cobrança destinatária FIDC"],
+        [43,    2,      "A",    "Brancos",      "Reservado (uso Banco)"],
+        [45,    13,     "N",    "Nosso Número", "Identificação do boleto no Banco"],
+        [58,    1,      "A",    "",             "Tipo de cobrança"],
+        [59,    1,      "N",    "",             "Forma de cadastramento"],
+        [60,    1,      "N",    "",             "Tipo de documento"],
+        [61,    1,      "A",    "Brancos",      "Reservado (uso Banco)"],
+        [62,    1,      "A",    "Brancos",      "Reservado (uso Banco)"],
+        [63,    15,     "N",    "Seu Número",   "Nº do documento"],
+        [78,    8,      "N",    "DDMMAAAA",     "Data de vencimento do boleto"],
+        [86,    15,     "N",    "",             "Valor nominal do boleto"],
+        [101,   4,      "N",    "",             "Agência encarregada da cobrança FIDC"],
+        [105,   1,      "N",    "",             "Dígito da Agência do Beneficiário FIDC"],
+        [106,   1,      "A",    "Brancos",      "Reservado (uso Banco)"],
+        [107,   2,      "N",    "",             "Espécie do boleto"],
+        [109,   1,      "A",    "",             "Identif. de boleto Aceito/Não Aceito "],
+        [110,   8,      "N",    "DDMMAAAA",     "Data de emissão do boleto"],
+        [118,   1,      "N",    "",             "Código de juros de mora"],
+        [119,   8,      "N",    "DDMMAAAA",     "Data de juros de mora"],
+        [127,   15,     "N",    "",             "Valor de mora/dia ou taxa mensal"],
+        [142,   1,      "N",    "",             "Código do desconto 1"],
+        [143,   8,      "N",    "DDMMAAAA",     "Data do desconto 1"],
+        [151,   15,     "N",    "",             "Valor ou percentual do desconto 1"],
+        [166,   15,     "N",    "",             "Percentual do IOF a ser recolhido"],
+        [181,   15,     "N",    "",             "Valor do abatimento"],
+        [196,   25,     "A",    "",             "Identificação do boleto na empresa"],
+        [221,   1,      "N",    "",             "Código para protesto"],
+        [222,   2,      "N",    "",             "Número de dias para protesto"],
+        [224,   1,      "N",    "",             "Código para baixa/devolução"],
+        [225,   1,      "N",    "0",            "Reservado (uso Banco)"],
+        [226,   2,      "N",    "",             "Número de dias para baixa/devolução"],
+        [228,   2,      "N",    "",             "Código da moeda"],
+        [230,   11,     "A",    "Brancos",      "Reservado (uso Banco)"]
     ];
 
-    $strTableHeader = geraTabela($dados, $_POST['header']);
+    $strTableP = geraTabela($dados, $_POST['segmento_p']);
 }
-if (!empty($_POST['header_lote'])) {
+if (!empty($_POST['segmento_q'])) {
     $dados = [
-        [1,     3,      "N",    "033",      "Código do Banco na compensação"],
-        [4,     4,      "N",    "",         "Número do lote de serviço "],
-        [8,     1,      "N",    "1",        "Tipo de registro"],
-        [9,     1,      "A",    "R",        "Tipo de operação"],
-        [10,    2,      "N",    "01",       "Tipo de serviço"],
-        [12,    2,      "A",    "Brancos",  "Reservado (uso do banco)"],
-        [14,    3,      "N",    "040",      "Nº da versão do layout do lote"],
-        [17,    1,      "A",    "Brancos",  "Reservado (uso do banco)"],
-        [18,    1,      "N",    "",         "Tipo de inscrição da empresa"],
-        [19,    15,     "N",    "",         "Nº de inscrição da empresa"],
-        [34,    20,     "A",    "Brancos",  "Reservado (uso do banco)"],
-        [54,    15,     "N",    "",         "Código de transmissão"],
-        [69,    5,      "A",    "Brancos",  "Reservado (uso do banco)"],
-        [74,    30,     "A",    "",         "Nome do beneficiário"],
-        [104,   40,     "A",    "",         "Mensagem 1"],
-        [144,   40,     "A",    "",         "Mensagem 2"],
-        [184,   8,      "N",    "",         "Número remessa"],
-        [192,   8,      "N",    "DDMMAAAA", "Data da gravação da remessa"],
-        [200,   41,     "A",    "Brancos",  "Reservado (uso do banco)"]
+        [1,     3,      "N",    "033",          "Código do Banco na compensação"],
+        [4,     4,      "N",    "",             "Número do lote remessa"],
+        [8,     1,      "N",    "3",            "Tipo de registro"],
+        [9,     5,      "N",    "",             "Nº sequencial do registro no lote"],
+        [14,    1,      "A",    "Q",            "Cód. segmento do registro detalhe"],
+        [15,    1,      "A",    "Brancos",      "Reservado (uso Banco)"],
+        [16,    2,      "N",    "",             "Código de movimento remessa"],
+        [18,    1,      "N",    "",             "Tipo de inscrição do pagador"],
+        [19,    15,     "N",    "",             "Número de inscrição do pagador"],
+        [34,    40,     "A",    "",             "Nome do pagador"],
+        [74,    40,     "A",    "",             "Endereço do pagador"],
+        [114,   15,     "A",    "",             "Bairro do pagador"],
+        [129,   5,      "N",    "",             "CEP do pagador"],
+        [134,   3,      "N",    "",             "Sufixo CEP do pagador"],
+        [137,   15,     "A",    "",             "Cidade do pagador"],
+        [152,   2,      "A",    "",             "Unidade da Federação do pagador"],
+        [154,   1,      "N",    "",             "Tipo de inscrição do beneficiário final"],
+        [155,   15,     "N",    "",             "Número de inscrição do beneficiário final"],
+        [170,   40,     "A",    "",             "Nome do beneficiário final"],
+        [210,   3,      "N",    "000",          "Reservado (uso Banco)"],
+        [213,   3,      "N",    "000",          "Reservado (uso Banco)"],
+        [216,   3,      "N",    "000",          "Reservado (uso Banco)"],
+        [219,   3,      "N",    "000",          "Reservado (uso Banco)"],
+        [222,   19,     "A",    "Brancos",      "Reservado (uso Banco)"]     
     ];
 
-    $strTableHeaderLote = geraTabela($dados, $_POST['header_lote']);
+    $strTableQ = geraTabela($dados, $_POST['segmento_q']);
 }
-if (!empty($_POST['trailer_lote'])) {
-    $dados = [
-        [1,     3,      "N",    "033",      "Código do Banco na compensação"],
-        [4,     4,      "N",    "",         "Número do lote de remessa"],
-        [8,     1,      "N",    "5",        "Tipo de registro"],
-        [9,     9,      "A",    "Brancos",  "Reservado (uso do banco)"],
-        [18,    6,      "N",    "",         "Quantidade de registros do lote"],
-        [24,    217,    "A",    "Brancos",  "Reservado (uso do banco)"]
-    ];
-    
-    $strTableTrailerLote = geraTabela($dados, $_POST['trailer_lote']);
-}
-if (!empty($_POST['trailer'])) {
-    $dados = [
-        [1,     3,      "N",    "033",      "Código do Banco na compensação"],
-        [4,     4,      "N",    "",         "Número da remessa"],
-        [8,     1,      "N",    "9",        "Tipo de registro"],
-        [9,     9,      "A",    "Brancos",  "Reservado (uso do banco)"],
-        [18,    6,      "N",    "",         "Quantidade de lotes do arquivo"],
-        [24,    6,      "N",    "",         "Quantidade de registros do arquivo"],
-        [30,    211,    "A",    "Brancos",  "Reservado (uso do banco)"]
-    ];
 
-    $strTableTrailer = geraTabela($dados, $_POST['trailer']);
-}
 ?>
 <html>
 
@@ -242,107 +338,53 @@ if (!empty($_POST['trailer'])) {
     </div>
     <div class="tabelas">
         <?php
-        if (!empty($_POST['segmento_t'])) {
-            echo "<div class='container result'>
-        <h1>Segmento T</h1>
-        <table>
-            <tr>
-                <th class='campo_maior'>Trecho</th>
-                <th class='campo_maior'>Padrão</th>
-                <th>?</th>
-                <th>Tipo</th>
-                <th class='campo_maior'>Descrição</th>
-                <th>Pos_ini</th>
-                <th>Pos_fim</th>
-            </tr>
-            {$strTableT}
-        </table>
-        </div>";
-        }
-        if (!empty($_POST['segmento_u'])) {
-            echo "<div class='container result'>
-        <h1>Segmento U</h1>
-        <table>
-            <tr>
-                <th class='campo_maior'>Trecho</th>
-                <th class='campo_maior'>Padrão</th>
-                <th>?</th>
-                <th>Tipo</th>
-                <th class='campo_maior'>Descrição</th>
-                <th>Pos_ini</th>
-                <th>Pos_fim</th>
-            </tr>
-            {$strTableU}
-        </table>
-        </div>";
-        }
         if (!empty($_POST['header'])) {
-            echo "<div class='container result'>
-        <h1>Header</h1>
-        <table>
-            <tr>
-                <th class='campo_maior'>Trecho</th>
-                <th class='campo_maior'>Padrão</th>
-                <th>?</th>
-                <th>Tipo</th>
-                <th class='campo_maior'>Descrição</th>
-                <th>Pos_ini</th>
-                <th>Pos_fim</th>
-            </tr>
-            {$strTableHeader}
-        </table>
-        </div>";
+            echo "  <div class='container result'>
+                        <h1>Header</h1>                
+                        {$strTableHeader}
+                    </div>";
         }
         if (!empty($_POST['header_lote'])) {
-            echo "<div class='container result'>
-        <h1>Header Lote</h1>
-        <table>
-            <tr>
-                <th class='campo_maior'>Trecho</th>
-                <th class='campo_maior'>Padrão</th>
-                <th>?</th>
-                <th>Tipo</th>
-                <th class='campo_maior'>Descrição</th>
-                <th>Pos_ini</th>
-                <th>Pos_fim</th>
-            </tr>
-            {$strTableHeaderLote}
-        </table>
-        </div>";
+            echo "  <div class='container result'>
+                        <h1>Header Lote</h1>
+                        {$strTableHeaderLote}
+                    </div>";
         }
         if (!empty($_POST['trailer_lote'])) {
-            echo "<div class='container result'>
-        <h1>Trailer Lote</h1>
-        <table>
-            <tr>
-                <th class='campo_maior'>Trecho</th>
-                <th class='campo_maior'>Padrão</th>
-                <th>?</th>
-                <th>Tipo</th>
-                <th class='campo_maior'>Descrição</th>
-                <th>Pos_ini</th>
-                <th>Pos_fim</th>
-            </tr>
-            {$strTableTrailerLote}
-        </table>
-        </div>";
+            echo "  <div class='container result'>
+                        <h1>Trailer Lote</h1>
+                        {$strTableTrailerLote}
+                    </div>";
         }
         if (!empty($_POST['trailer'])) {
-            echo "<div class='container result'>
-        <h1>Trailer</h1>
-        <table>
-            <tr>
-                <th class='campo_maior'>Trecho</th>
-                <th class='campo_maior'>Padrão</th>
-                <th>?</th>
-                <th>Tipo</th>
-                <th class='campo_maior'>Descrição</th>
-                <th>Pos_ini</th>
-                <th>Pos_fim</th>
-            </tr>
-            {$strTableTrailer}
-        </table>
-        </div>";
+            echo "  <div class='container result'>
+                        <h1>Trailer</h1>
+                        {$strTableTrailer}
+                    </div>";
+        }
+        if (!empty($_POST['segmento_t'])) {
+            echo "  <div class='container result'>
+                        <h1>Segmento T</h1>
+                        {$strTableT}
+                    </div>";
+        }
+        if (!empty($_POST['segmento_u'])) {
+            echo "  <div class='container result'>
+                        <h1>Segmento U</h1>
+                        {$strTableU}
+                    </div>";
+        }
+        if (!empty($_POST['segmento_p'])) {
+            echo "  <div class='container result'>
+                        <h1>Segmento P</h1>
+                        {$strTableP}
+                    </div>";
+        }
+        if (!empty($_POST['segmento_q'])) {
+            echo "  <div class='container result'>
+                        <h1>Segmento Q</h1>
+                        {$strTableQ}
+                    </div>";
         }
         ?>
     </div>
