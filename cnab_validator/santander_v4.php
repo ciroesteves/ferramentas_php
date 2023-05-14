@@ -1,5 +1,35 @@
 <?php
 $strTableT = $strTableU = $strTableHeader = $strTableHeaderLote = $strTableTrailer = $strTableTrailerLote =  '';
+function geraTabela($dados, $linha){
+    $str = "";
+    foreach ($dados as $dado) {
+        $pos = $dado[0] + $dado[1] - 1;
+        $trecho = substr($linha, $dado[0] - 1, $dado[1]);
+
+        $is_ok = "ERRO";
+        if ($trecho == $dado[3]) {
+            $is_ok = "OK";
+        } else if ($dado[2] == "N" && $dado[3] == "") {
+            $is_ok = is_numeric($trecho) ? "OK" : "ERRO";
+        } else if ($dado[2] == "A" && $dado[3] == "") {
+            $is_ok = "";
+        } else if ($dado[3] == "Brancos" && empty(trim($trecho))) {
+            $is_ok = "OK";
+        }
+
+        $str .= "<tr>
+        <td>{$trecho}</td> 
+        <td>{$dado[3]}</td>
+        <td>{$is_ok}</td>
+        <td>{$dado[2]}</td>
+        <td>{$dado[4]}</td>
+        <td>{$dado[0]}</td>
+        <td>{$pos}</td>
+    </tr>";
+    }
+    return $str;
+}
+
 if (!empty($_POST['segmento_t'])) {
     $dados = [
         [1,     3,  "N", "033",         "Código do Banco na compensação"],
@@ -32,32 +62,7 @@ if (!empty($_POST['segmento_t'])) {
         [209,   10, "A", "",            "Identificação para rejeições, tarifas, custas, liquidações, baixas e PIX."],
         [219,   22, "A", "Brancos",     "Reservado (uso Banco)"]
     ];
-
-    foreach ($dados as $dado) {
-        $pos = $dado[0] + $dado[1] - 1;
-        $trecho = substr($_POST['segmento_t'], $dado[0] - 1, $dado[1]);
-
-        $is_ok = "ERRO";
-        if ($trecho == $dado[3]) {
-            $is_ok = "OK";
-        } else if ($dado[2] == "N" && $dado[3] == "") {
-            $is_ok = is_numeric($trecho) ? "OK" : "ERRO";
-        } else if ($dado[2] == "A" && $dado[3] == "") {
-            $is_ok = "";
-        } else if ($dado[3] == "Brancos" && empty(trim($trecho))) {
-            $is_ok = "OK";
-        }
-
-        $strTableT .= "<tr>
-        <td>{$trecho}</td> 
-        <td>{$dado[3]}</td>
-        <td>{$is_ok}</td>
-        <td>{$dado[2]}</td>
-        <td>{$dado[4]}</td>
-        <td>{$dado[0]}</td>
-        <td>{$pos}</td>
-    </tr>";
-    }
+    $strTableT = geraTabela($dados, $_POST['segmento_t']);
 }
 if (!empty($_POST['segmento_u'])) {
     $dados = [
@@ -86,31 +91,7 @@ if (!empty($_POST['segmento_u'])) {
         [214,   27,     "A",    "Brancos",  "Reservado"]
     ];
 
-    foreach ($dados as $dado) {
-        $pos = $dado[0] + $dado[1] - 1;
-        $trecho = substr($_POST['segmento_u'], $dado[0] - 1, $dado[1]);
-
-        $is_ok = "ERRO";
-        if ($trecho == $dado[3]) {
-            $is_ok = "OK";
-        } else if ($dado[2] == "N" && $dado[3] == "") {
-            $is_ok = is_numeric($trecho) ? "OK" : "ERRO";
-        } else if ($dado[2] == "A" && $dado[3] == "") {
-            $is_ok = "";
-        } else if ($dado[3] == "Brancos" && empty(trim($trecho))) {
-            $is_ok = "OK";
-        }
-
-        $strTableU .= "<tr>
-        <td>{$trecho}</td> 
-        <td>{$dado[3]}</td>
-        <td>{$is_ok}</td>
-        <td>{$dado[2]}</td>
-        <td>{$dado[4]}</td>
-        <td>{$dado[0]}</td>
-        <td>{$pos}</td>
-    </tr>";
-    }
+    $strTableU = geraTabela($dados, $_POST['segmento_u']);
 }
 if (!empty($_POST['header'])) {
     $dados = [
@@ -134,31 +115,7 @@ if (!empty($_POST['header'])) {
 
     ];
 
-    foreach ($dados as $dado) {
-        $pos = $dado[0] + $dado[1] - 1;
-        $trecho = substr($_POST['header'], $dado[0] - 1, $dado[1]);
-
-        $is_ok = "ERRO";
-        if ($trecho == $dado[3]) {
-            $is_ok = "OK";
-        } else if ($dado[2] == "N" && $dado[3] == "") {
-            $is_ok = is_numeric($trecho) ? "OK" : "ERRO";
-        } else if ($dado[2] == "A" && $dado[3] == "") {
-            $is_ok = "";
-        } else if ($dado[3] == "Brancos" && empty(trim($trecho))) {
-            $is_ok = "OK";
-        }
-
-        $strTableHeader .= "<tr>
-        <td>{$trecho}</td> 
-        <td>{$dado[3]}</td>
-        <td>{$is_ok}</td>
-        <td>{$dado[2]}</td>
-        <td>{$dado[4]}</td>
-        <td>{$dado[0]}</td>
-        <td>{$pos}</td>
-    </tr>";
-    }
+    $strTableHeader = geraTabela($dados, $_POST['header']);
 }
 if (!empty($_POST['header_lote'])) {
     $dados = [
@@ -183,31 +140,7 @@ if (!empty($_POST['header_lote'])) {
         [200,   41,     "A",    "Brancos",  "Reservado (uso do banco)"]
     ];
 
-    foreach ($dados as $dado) {
-        $pos = $dado[0] + $dado[1] - 1;
-        $trecho = substr($_POST['header_lote'], $dado[0] - 1, $dado[1]);
-
-        $is_ok = "ERRO";
-        if ($trecho == $dado[3]) {
-            $is_ok = "OK";
-        } else if ($dado[2] == "N" && $dado[3] == "") {
-            $is_ok = is_numeric($trecho) ? "OK" : "ERRO";
-        } else if ($dado[2] == "A" && $dado[3] == "") {
-            $is_ok = "";
-        } else if ($dado[3] == "Brancos" && empty(trim($trecho))) {
-            $is_ok = "OK";
-        }
-
-        $strTableHeaderLote .= "<tr>
-        <td>{$trecho}</td> 
-        <td>{$dado[3]}</td>
-        <td>{$is_ok}</td>
-        <td>{$dado[2]}</td>
-        <td>{$dado[4]}</td>
-        <td>{$dado[0]}</td>
-        <td>{$pos}</td>
-    </tr>";
-    }
+    $strTableHeaderLote = geraTabela($dados, $_POST['header_lote']);
 }
 if (!empty($_POST['trailer_lote'])) {
     $dados = [
@@ -218,32 +151,8 @@ if (!empty($_POST['trailer_lote'])) {
         [18,    6,      "N",    "",         "Quantidade de registros do lote"],
         [24,    217,    "A",    "Brancos",  "Reservado (uso do banco)"]
     ];
-
-    foreach ($dados as $dado) {
-        $pos = $dado[0] + $dado[1] - 1;
-        $trecho = substr($_POST['trailer_lote'], $dado[0] - 1, $dado[1]);
-
-        $is_ok = "ERRO";
-        if ($trecho == $dado[3]) {
-            $is_ok = "OK";
-        } else if ($dado[2] == "N" && $dado[3] == "") {
-            $is_ok = is_numeric($trecho) ? "OK" : "ERRO";
-        } else if ($dado[2] == "A" && $dado[3] == "") {
-            $is_ok = "";
-        } else if ($dado[3] == "Brancos" && empty(trim($trecho))) {
-            $is_ok = "OK";
-        }
-
-        $strTableTrailerLote .= "<tr>
-        <td>{$trecho}</td> 
-        <td>{$dado[3]}</td>
-        <td>{$is_ok}</td>
-        <td>{$dado[2]}</td>
-        <td>{$dado[4]}</td>
-        <td>{$dado[0]}</td>
-        <td>{$pos}</td>
-    </tr>";
-    }
+    
+    $strTableTrailerLote = geraTabela($dados, $_POST['trailer_lote']);
 }
 if (!empty($_POST['trailer'])) {
     $dados = [
@@ -256,31 +165,7 @@ if (!empty($_POST['trailer'])) {
         [30,    211,    "A",    "Brancos",  "Reservado (uso do banco)"]
     ];
 
-    foreach ($dados as $dado) {
-        $pos = $dado[0] + $dado[1] - 1;
-        $trecho = substr($_POST['trailer'], $dado[0] - 1, $dado[1]);
-
-        $is_ok = "ERRO";
-        if ($trecho == $dado[3]) {
-            $is_ok = "OK";
-        } else if ($dado[2] == "N" && $dado[3] == "") {
-            $is_ok = is_numeric($trecho) ? "OK" : "ERRO";
-        } else if ($dado[2] == "A" && $dado[3] == "") {
-            $is_ok = "";
-        } else if ($dado[3] == "Brancos" && empty(trim($trecho))) {
-            $is_ok = "OK";
-        }
-
-        $strTableTrailer .= "<tr>
-        <td>{$trecho}</td> 
-        <td>{$dado[3]}</td>
-        <td>{$is_ok}</td>
-        <td>{$dado[2]}</td>
-        <td>{$dado[4]}</td>
-        <td>{$dado[0]}</td>
-        <td>{$pos}</td>
-    </tr>";
-    }
+    $strTableTrailer = geraTabela($dados, $_POST['trailer']);
 }
 ?>
 <html>
@@ -370,7 +255,6 @@ if (!empty($_POST['trailer'])) {
                 <th>Pos_ini</th>
                 <th>Pos_fim</th>
             </tr>
-            <?php
             {$strTableT}
         </table>
         </div>";
@@ -388,7 +272,6 @@ if (!empty($_POST['trailer'])) {
                 <th>Pos_ini</th>
                 <th>Pos_fim</th>
             </tr>
-            <?php
             {$strTableU}
         </table>
         </div>";
@@ -406,7 +289,6 @@ if (!empty($_POST['trailer'])) {
                 <th>Pos_ini</th>
                 <th>Pos_fim</th>
             </tr>
-            <?php
             {$strTableHeader}
         </table>
         </div>";
@@ -424,7 +306,6 @@ if (!empty($_POST['trailer'])) {
                 <th>Pos_ini</th>
                 <th>Pos_fim</th>
             </tr>
-            <?php
             {$strTableHeaderLote}
         </table>
         </div>";
@@ -442,7 +323,6 @@ if (!empty($_POST['trailer'])) {
                 <th>Pos_ini</th>
                 <th>Pos_fim</th>
             </tr>
-            <?php
             {$strTableTrailerLote}
         </table>
         </div>";
@@ -460,7 +340,6 @@ if (!empty($_POST['trailer'])) {
                 <th>Pos_ini</th>
                 <th>Pos_fim</th>
             </tr>
-            <?php
             {$strTableTrailer}
         </table>
         </div>";
@@ -611,7 +490,7 @@ if (!empty($_POST['trailer'])) {
     .result {
         height: auto;
         margin: auto;
-        padding: 10px;
+        padding: 30px;
     }
 </style>
 
