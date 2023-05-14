@@ -1,5 +1,5 @@
 <?php
-$strTableT = $strTableU = $strTableHeader = '';
+$strTableT = $strTableU = $strTableHeader = $strTableHeaderLote = $strTableTrailer = $strTableTrailerLote =  '';
 if (!empty($_POST['segmento_t'])) {
     $dados = [
         [1,     3,  "N", "033",         "Código do Banco na compensação"],
@@ -14,7 +14,7 @@ if (!empty($_POST['segmento_t'])) {
         [23,    9,  "N", "",            "Número da conta corrente"],
         [32,    1,  "N", "",            "Dígito verificador da conta"],
         [33,    8,  "A", "Brancos",     "Reservado (uso Banco)"],
-        [41,    13, "N", "Nosso Número","Identificação do boleto no Banco"],
+        [41,    13, "N", "Nosso Número", "Identificação do boleto no Banco"],
         [54,    1,  "A", "",             "Código da carteira"],
         [55,    15, "A", "Seu Número",  "Nº do documento de cobrança"],
         [70,    8,  "N", "DDMMAAAA",    "Data do vencimento do boleto"],
@@ -163,23 +163,24 @@ if (!empty($_POST['header'])) {
 if (!empty($_POST['header_lote'])) {
     $dados = [
         [1,     3,      "N",    "033",      "Código do Banco na compensação"],
-        [4,     4,      "N",    "0000",     "Lote de serviço "],
-        [8,     1,      "N",    "0",        "Tipo de registro"],
-        [9,     8,      "A",    "",         "Reservado (uso do banco)"],
-        [17,    1,      "N",    "",         "Tipo de inscrição da empresa"],
-        [18,    15,     "N",    "",         "Número de inscrição da empresa"],
-        [33,    15,     "N",    "",         "Código de transmissão"],
-        [48,    25,     "A",    "Brancos",  "Reservado (uso do banco)"],
-        [73,    30,     "A",    "",         "Nome da empresa"],
-        [103,   30,     "A",    "Banco Santander",  "Nome do Banco"],
-        [133,   10,     "A",    "Brancos",          "Reservado (uso do banco)"],
-        [143,   1,      "N",    "1",                "Código Remessa"],
-        [144,   8,      "N",    "DDMMAAAA",         "Data da geração do arquivo"],
-        [152,   6,      "A",    "Brancos",          "Reservado (uso do banco)"],
-        [158,   6,      "N",    "",                 "Número sequencial do arquivo"],
-        [164,   3,      "N",    "040",              "Versão do layout do arquivo"],
-        [167,   74,     "A",    "Brancos",          "Reservado (uso do banco)"]
-
+        [4,     4,      "N",    "",         "Número do lote de serviço "],
+        [8,     1,      "N",    "1",        "Tipo de registro"],
+        [9,     1,      "A",    "R",        "Tipo de operação"],
+        [10,    2,      "N",    "01",       "Tipo de serviço"],
+        [12,    2,      "A",    "Brancos",  "Reservado (uso do banco)"],
+        [14,    3,      "N",    "040",      "Nº da versão do layout do lote"],
+        [17,    1,      "A",    "Brancos",  "Reservado (uso do banco)"],
+        [18,    1,      "N",    "",         "Tipo de inscrição da empresa"],
+        [19,    15,     "N",    "",         "Nº de inscrição da empresa"],
+        [34,    20,     "A",    "Brancos",  "Reservado (uso do banco)"],
+        [54,    15,     "N",    "",         "Código de transmissão"],
+        [69,    5,      "A",    "Brancos",  "Reservado (uso do banco)"],
+        [74,    30,     "A",    "",         "Nome do beneficiário"],
+        [104,   40,     "A",    "",         "Mensagem 1"],
+        [144,   40,     "A",    "",         "Mensagem 2"],
+        [184,   8,      "N",    "",         "Número remessa"],
+        [192,   8,      "N",    "DDMMAAAA", "Data da gravação da remessa"],
+        [200,   41,     "A",    "Brancos",  "Reservado (uso do banco)"]
     ];
 
     foreach ($dados as $dado) {
@@ -198,6 +199,79 @@ if (!empty($_POST['header_lote'])) {
         }
 
         $strTableHeaderLote .= "<tr>
+        <td>{$trecho}</td> 
+        <td>{$dado[3]}</td>
+        <td>{$is_ok}</td>
+        <td>{$dado[2]}</td>
+        <td>{$dado[4]}</td>
+        <td>{$dado[0]}</td>
+        <td>{$pos}</td>
+    </tr>";
+    }
+}
+if (!empty($_POST['trailer_lote'])) {
+    $dados = [
+        [1,     3,      "N",    "033",      "Código do Banco na compensação"],
+        [4,     4,      "N",    "",         "Número do lote de remessa"],
+        [8,     1,      "N",    "5",        "Tipo de registro"],
+        [9,     9,      "A",    "Brancos",  "Reservado (uso do banco)"],
+        [18,    6,      "N",    "",         "Quantidade de registros do lote"],
+        [24,    217,    "A",    "Brancos",  "Reservado (uso do banco)"]
+    ];
+
+    foreach ($dados as $dado) {
+        $pos = $dado[0] + $dado[1] - 1;
+        $trecho = substr($_POST['trailer_lote'], $dado[0] - 1, $dado[1]);
+
+        $is_ok = "ERRO";
+        if ($trecho == $dado[3]) {
+            $is_ok = "OK";
+        } else if ($dado[2] == "N" && $dado[3] == "") {
+            $is_ok = is_numeric($trecho) ? "OK" : "ERRO";
+        } else if ($dado[2] == "A" && $dado[3] == "") {
+            $is_ok = "";
+        } else if ($dado[3] == "Brancos" && empty(trim($trecho))) {
+            $is_ok = "OK";
+        }
+
+        $strTableTrailerLote .= "<tr>
+        <td>{$trecho}</td> 
+        <td>{$dado[3]}</td>
+        <td>{$is_ok}</td>
+        <td>{$dado[2]}</td>
+        <td>{$dado[4]}</td>
+        <td>{$dado[0]}</td>
+        <td>{$pos}</td>
+    </tr>";
+    }
+}
+if (!empty($_POST['trailer'])) {
+    $dados = [
+        [1,     3,      "N",    "033",      "Código do Banco na compensação"],
+        [4,     4,      "N",    "",         "Número da remessa"],
+        [8,     1,      "N",    "9",        "Tipo de registro"],
+        [9,     9,      "A",    "Brancos",  "Reservado (uso do banco)"],
+        [18,    6,      "N",    "",         "Quantidade de lotes do arquivo"],
+        [24,    6,      "N",    "",         "Quantidade de registros do arquivo"],
+        [30,    211,    "A",    "Brancos",  "Reservado (uso do banco)"]
+    ];
+
+    foreach ($dados as $dado) {
+        $pos = $dado[0] + $dado[1] - 1;
+        $trecho = substr($_POST['trailer'], $dado[0] - 1, $dado[1]);
+
+        $is_ok = "ERRO";
+        if ($trecho == $dado[3]) {
+            $is_ok = "OK";
+        } else if ($dado[2] == "N" && $dado[3] == "") {
+            $is_ok = is_numeric($trecho) ? "OK" : "ERRO";
+        } else if ($dado[2] == "A" && $dado[3] == "") {
+            $is_ok = "";
+        } else if ($dado[3] == "Brancos" && empty(trim($trecho))) {
+            $is_ok = "OK";
+        }
+
+        $strTableTrailer .= "<tr>
         <td>{$trecho}</td> 
         <td>{$dado[3]}</td>
         <td>{$is_ok}</td>
@@ -281,9 +355,10 @@ if (!empty($_POST['header_lote'])) {
             </form>
         </div>
     </div>
-    <?php
-    if (!empty($_POST['segmento_t'])) {
-        echo "<div class='container result'>
+    <div class="tabelas">
+        <?php
+        if (!empty($_POST['segmento_t'])) {
+            echo "<div class='container result'>
         <h1>Segmento T</h1>
         <table>
             <tr>
@@ -299,9 +374,9 @@ if (!empty($_POST['header_lote'])) {
             {$strTableT}
         </table>
         </div>";
-    }
-    if (!empty($_POST['segmento_u'])) {
-        echo "<div class='container result'>
+        }
+        if (!empty($_POST['segmento_u'])) {
+            echo "<div class='container result'>
         <h1>Segmento U</h1>
         <table>
             <tr>
@@ -317,9 +392,9 @@ if (!empty($_POST['header_lote'])) {
             {$strTableU}
         </table>
         </div>";
-    }
-    if (!empty($_POST['header'])) {
-        echo "<div class='container result'>
+        }
+        if (!empty($_POST['header'])) {
+            echo "<div class='container result'>
         <h1>Header</h1>
         <table>
             <tr>
@@ -335,10 +410,78 @@ if (!empty($_POST['header_lote'])) {
             {$strTableHeader}
         </table>
         </div>";
-    }
-    ?>
+        }
+        if (!empty($_POST['header_lote'])) {
+            echo "<div class='container result'>
+        <h1>Header Lote</h1>
+        <table>
+            <tr>
+                <th class='campo_maior'>Trecho</th>
+                <th class='campo_maior'>Padrão</th>
+                <th>?</th>
+                <th>Tipo</th>
+                <th class='campo_maior'>Descrição</th>
+                <th>Pos_ini</th>
+                <th>Pos_fim</th>
+            </tr>
+            <?php
+            {$strTableHeaderLote}
+        </table>
+        </div>";
+        }
+        if (!empty($_POST['trailer_lote'])) {
+            echo "<div class='container result'>
+        <h1>Trailer Lote</h1>
+        <table>
+            <tr>
+                <th class='campo_maior'>Trecho</th>
+                <th class='campo_maior'>Padrão</th>
+                <th>?</th>
+                <th>Tipo</th>
+                <th class='campo_maior'>Descrição</th>
+                <th>Pos_ini</th>
+                <th>Pos_fim</th>
+            </tr>
+            <?php
+            {$strTableTrailerLote}
+        </table>
+        </div>";
+        }
+        if (!empty($_POST['trailer'])) {
+            echo "<div class='container result'>
+        <h1>Trailer</h1>
+        <table>
+            <tr>
+                <th class='campo_maior'>Trecho</th>
+                <th class='campo_maior'>Padrão</th>
+                <th>?</th>
+                <th>Tipo</th>
+                <th class='campo_maior'>Descrição</th>
+                <th>Pos_ini</th>
+                <th>Pos_fim</th>
+            </tr>
+            <?php
+            {$strTableTrailer}
+        </table>
+        </div>";
+        }
+        ?>
+    </div>
 </body>
+
 <script>
+    $(document).ready(function() {
+        $('.tabelas').slick({
+            dots: true,
+            infinite: true,
+            speed: 300,
+            prevArrow: '<button type="button" class="slick-prev">Previous</button>',
+            nextArrow: '<button type="button" class="slick-next">Next</button>',
+            slidesToShow: 1,
+            slidesToScroll: 1,
+        });
+    });
+
     $(document).ready(function() {
         $('.slick-carousel').slick({
             dots: false,
@@ -395,7 +538,13 @@ if (!empty($_POST['header_lote'])) {
 
     table {
         border-collapse: collapse;
-        width: 100%;
+        width: 90%;
+        margin: auto;
+    }
+
+    .tabelas {
+        width: 95%;
+        margin: auto;
     }
 
     th,
@@ -416,16 +565,10 @@ if (!empty($_POST['header_lote'])) {
         width: 450px;
     }
 
-    
-
-    #forms {
-        display: flex;
-    }
-
     .container {
         width: 45%;
         background-color: #f9f9f9;
-        border-radius: 5px;
+        border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     }
 
@@ -464,10 +607,11 @@ if (!empty($_POST['header_lote'])) {
     body {
         background-color: red;
     }
+
     .result {
-        width: 95%;
         height: auto;
-        margin: 20px auto;
+        margin: auto;
+        padding: 10px;
     }
 </style>
 
