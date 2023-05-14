@@ -459,6 +459,12 @@ if (!empty($_POST['segmento_s'])) {
                         {$strTableR}
                     </div>";
         }
+        if (!empty($_POST['segmento_s'])) {
+            echo "  <div class='container result'>
+                        <h1>Segmento S</h1>
+                        {$strTableS}
+                    </div>";
+        }
         ?>
     </div>
 </body>
