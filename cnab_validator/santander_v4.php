@@ -4,7 +4,8 @@ $strTableHeader             = $strTableHeaderLote   = $strTableTrailer          
     $strTableR              = $strTableS            =  $strTableT               =
     $strTableU              =  '';
 
-function geraTabela($dados, $linha) {
+function geraTabela($dados, $linha)
+{
     $str = "<table>
                 <tr>
                     <th class='campo_maior'>Trecho</th>
@@ -257,10 +258,76 @@ if (!empty($_POST['segmento_q'])) {
         [213,   3,      "N",    "000",          "Reservado (uso Banco)"],
         [216,   3,      "N",    "000",          "Reservado (uso Banco)"],
         [219,   3,      "N",    "000",          "Reservado (uso Banco)"],
-        [222,   19,     "A",    "Brancos",      "Reservado (uso Banco)"]     
+        [222,   19,     "A",    "Brancos",      "Reservado (uso Banco)"]
     ];
 
     $strTableQ = geraTabela($dados, $_POST['segmento_q']);
+}
+if (!empty($_POST['segmento_r'])) {
+    $dados = [
+        [1,     3,      "N",    "033",          "Código do Banco na compensação"],
+        [4,     4,      "N",    "",             "Número do lote remessa"],
+        [8,     1,      "N",    "3",            "Tipo de registro"],
+        [9,     5,      "N",    "",             "Nº sequencial do registro no lote"],
+        [14,    1,      "A",    "R",            "Cód. segmento do registro detalhe"],
+        [15,    1,      "A",    "Brancos",      "Reservado (uso Banco)"],
+        [16,    2,      "N",    "",             "Código de movimento remessa"],
+        [18,    1,      "N",    "",             "Código do desconto 2"],
+        [19,    8,      "N",    "DDMMAAAA",     "Data do desconto 2"],
+        [27,    15,     "N",    "",             "Valor ou percentual do desconto 2"],
+        [42,    1,      "N",    "",             "Código do desconto 3"],
+        [43,    8,      "N",    "DDMMAAAA",     "Data do desconto 3"],
+        [51,    15,     "N",    "",             "Valor ou percentual do desconto 3"],
+        [66,    1,      "N",    "",             "Código da multa"],
+        [67,    8,      "N",    "DDMMAAAA",     "Data da multa"],
+        [75,    15,     "N",    "",             "Valor ou percentual da multa"],
+        [90,    10,     "A",    "Brancos",      "Reservado (uso Banco)"],
+        [100,   40,     "A",    "",             "Mensagem 3"],
+        [140,   40,     "A",    "",             "Mensagem 4"],
+        [180,   61,     "A",    "Brancos",      "Reservado (uso Banco)"]
+    ];
+
+    $strTableR = geraTabela($dados, $_POST['segmento_r']);
+}
+if (!empty($_POST['segmento_s'])) {
+    $dados = [
+        [1,     3,      "N",    "033",          "Código do Banco na compensação"],
+        [4,     4,      "N",    "",             "Número do lote remessa"],
+        [8,     1,      "N",    "3",            "Tipo de registro"],
+        [9,     5,      "N",    "",             "Nº sequencial do registro no lote"],
+        [14,    1,      "A",    "S",            "Cód. segmento do registro detalhe"],
+        [15,    1,      "A",    "Brancos",      "Reservado (uso Banco)"],
+        [16,    2,      "N",    "",             "Código de movimento remessa"]     
+    ];
+
+    if (substr($_POST['segmento_s'], 18, 1) == '1') {
+        $dadosCondicionais = [
+            [18,    1,      "N",    "1",            "Identificação da impressão"],
+            [19,    2,      "N",    "",             "Número da linha a ser impressa"],
+            [21,    1,      "N",    "",             "Mensagem para recibo do pagador"],
+            [22,    100,    "A",    "",             "Mensagem a ser impressa"],
+            [122,   119,    "A",    "Brancos",      "Reservado (uso Banco)"]
+        ];
+        foreach ($dadosCondicionais as $linhaDadosCondicionais) {
+            array_push($dados, $linhaDadosCondicionais);
+        }
+        
+    }else if(substr($_POST['segmento_s'], 18, 1) == '2'){
+        $dadosCondicionais = [
+            [18,    1,      "N",    "2",            "Identificação da impressão"],
+            [19,    40,     "A",    "",             "Mensagem 5"],
+            [59,    40,     "A",    "",             "Mensagem 6"],
+            [99,    40,     "A",    "",             "Mensagem 7"],
+            [139,   40,     "A",    "",             "Mensagem 8"],
+            [179,   40,     "A",    "",             "Mensagem 9"],
+            [219,   22,     "A",    "Brancos",      "Reservado (uso Banco)"]
+        ];
+        foreach ($dadosCondicionais as $linhaDadosCondicionais) {
+            array_push($dados, $linhaDadosCondicionais);
+        }
+    }
+
+    $strTableS = geraTabela($dados, $_POST['segmento_s']);
 }
 
 ?>
@@ -384,6 +451,12 @@ if (!empty($_POST['segmento_q'])) {
             echo "  <div class='container result'>
                         <h1>Segmento Q</h1>
                         {$strTableQ}
+                    </div>";
+        }
+        if (!empty($_POST['segmento_r'])) {
+            echo "  <div class='container result'>
+                        <h1>Segmento R</h1>
+                        {$strTableR}
                     </div>";
         }
         ?>
