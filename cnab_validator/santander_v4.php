@@ -4,8 +4,34 @@ $strTableHeader             = $strTableHeaderLote   = $strTableTrailer          
     $strTableR              = $strTableS            =  $strTableT               =
     $strTableU              =  '';
 
-function geraTabela($dados, $linha)
-{
+function campoNumerico($trecho, $padrao) {
+    if($padrao == "N") {
+        return !is_numeric($trecho) ? "ERRO" : "";
+    }
+    return "";
+}
+
+function campoBrancos($trecho, $padrao) {
+    if($padrao == "Brancos") {
+        return !empty(trim($trecho)) ? "ERRO" : "OK";
+    }
+    return "";
+}
+
+function campoValidaComPadrao($trecho, $padrao) {
+    if(!empty(trim($padrao))) {
+        if($trecho == $padrao) {
+            return "OK";
+        } else if(($padrao == "DDMMAAAA" || $padrao == "Nosso Número" || $padrao == "Seu Número")) {
+            return "";
+        } else {
+            return "ERRO";
+        }
+    } 
+    return "";
+}
+
+function geraTabela($dados, $linha) {
     $str = "<table>
                 <tr>
                     <th class='campo_maior'>Trecho</th>
@@ -16,22 +42,23 @@ function geraTabela($dados, $linha)
                     <th>Pos_ini</th>
                     <th>Pos_fim</th>
                 </tr>";
+                
     foreach ($dados as $dado) {
         $pos = $dado[0] + $dado[1] - 1;
         $trecho = substr($linha, $dado[0] - 1, $dado[1]);
+        
+        $is_ok = $backgroundLinha = "";
+        $is_ok = campoNumerico($trecho, $dado[2]) != "" ? campoNumerico($trecho, $dado[2]) : $is_ok;
+        $is_ok = campoValidaComPadrao($trecho, $dado[3]) != "" ? campoValidaComPadrao($trecho, $dado[3]) : $is_ok;
+        $is_ok = campoBrancos($trecho, $dado[3])  != "" ? campoBrancos($trecho, $dado[3]) : $is_ok;;
 
-        $is_ok = "ERRO";
-        if ($trecho == $dado[3]) {
-            $is_ok = "OK";
-        } else if ($dado[2] == "N" && $dado[3] == "") {
-            $is_ok = is_numeric($trecho) ? "OK" : "ERRO";
-        } else if ($dado[2] == "A" && $dado[3] == "") {
-            $is_ok = "";
-        } else if ($dado[3] == "Brancos" && empty(trim($trecho))) {
-            $is_ok = "OK";
+        if ($is_ok == "OK") {
+            $backgroundLinha = "class='ok'";
+        } else if($is_ok == "ERRO") {
+            $backgroundLinha = "class='erro'";
         }
-
-        $str .= "<tr>
+        
+        $str .= "<tr {$backgroundLinha}>
                     <td>{$trecho}</td> 
                     <td>{$dado[3]}</td>
                     <td>{$is_ok}</td>
@@ -558,7 +585,15 @@ if (!empty($_POST['segmento_s'])) {
     }
 
     tr:hover {
-        background-color: #f5f5f5;
+        background-color: #C0C0C0;
+    }
+
+    .erro:hover {
+        background-color: red;
+    }
+
+    .ok:hover {
+        background-color: green;
     }
 
     .campo_maior {
@@ -612,6 +647,14 @@ if (!empty($_POST['segmento_s'])) {
         height: auto;
         margin: auto;
         padding: 30px;
+    }
+
+    .ok {
+        background-color: #98FB98;
+    }
+
+    .erro {
+        background-color: #E9967A;
     }
 </style>
 
