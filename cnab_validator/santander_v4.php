@@ -1,4 +1,6 @@
 <?php
+include_once "menu.php";
+
 $strTableHeader             = $strTableHeaderLote   = $strTableTrailer          =
     $strTableTrailerLote    = $strTableP            = $strTableQ                =
     $strTableR              = $strTableS            =  $strTableT               =
@@ -553,7 +555,7 @@ if (!empty($_POST['segmento_s'])) {
 
     .slick-carousel {
         width: 45%;
-        height: 50%;
+        height: 400px;
         margin: 20px auto;
         border-radius: 5px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
