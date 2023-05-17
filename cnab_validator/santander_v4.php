@@ -6,34 +6,38 @@ $strTableHeader             = $strTableHeaderLote   = $strTableTrailer          
     $strTableR              = $strTableS            =  $strTableT               =
     $strTableU              =  '';
 
-function campoNumerico($trecho, $padrao) {
-    if($padrao == "N") {
+function campoNumerico($trecho, $padrao)
+{
+    if ($padrao == "N") {
         return !is_numeric($trecho) ? "ERRO" : "";
     }
     return "";
 }
 
-function campoBrancos($trecho, $padrao) {
-    if($padrao == "Brancos") {
+function campoBrancos($trecho, $padrao)
+{
+    if ($padrao == "Brancos") {
         return !empty(trim($trecho)) ? "ERRO" : "OK";
     }
     return "";
 }
 
-function campoValidaComPadrao($trecho, $padrao) {
-    if(!empty(trim($padrao))) {
-        if($trecho == $padrao) {
+function campoValidaComPadrao($trecho, $padrao)
+{
+    if (!empty(trim($padrao))) {
+        if ($trecho == $padrao) {
             return "OK";
-        } else if(($padrao == "DDMMAAAA" || $padrao == "Nosso Número" || $padrao == "Seu Número")) {
+        } else if (($padrao == "DDMMAAAA" || $padrao == "Nosso Número" || $padrao == "Seu Número")) {
             return "";
         } else {
             return "ERRO";
         }
-    } 
+    }
     return "";
 }
 
-function geraTabela($dados, $linha) {
+function geraTabela($dados, $linha)
+{
     $str = "<table>
                 <tr>
                     <th class='campo_maior'>Trecho</th>
@@ -44,11 +48,11 @@ function geraTabela($dados, $linha) {
                     <th>Pos_ini</th>
                     <th>Pos_fim</th>
                 </tr>";
-                
+
     foreach ($dados as $dado) {
         $pos = $dado[0] + $dado[1] - 1;
         $trecho = substr($linha, $dado[0] - 1, $dado[1]);
-        
+
         $is_ok = $backgroundLinha = "";
         $is_ok = campoNumerico($trecho, $dado[2]) != "" ? campoNumerico($trecho, $dado[2]) : $is_ok;
         $is_ok = campoValidaComPadrao($trecho, $dado[3]) != "" ? campoValidaComPadrao($trecho, $dado[3]) : $is_ok;
@@ -56,10 +60,10 @@ function geraTabela($dados, $linha) {
 
         if ($is_ok == "OK") {
             $backgroundLinha = "class='ok'";
-        } else if($is_ok == "ERRO") {
+        } else if ($is_ok == "ERRO") {
             $backgroundLinha = "class='erro'";
         }
-        
+
         $str .= "<tr {$backgroundLinha}>
                     <td>{$trecho}</td> 
                     <td>{$dado[3]}</td>
@@ -326,7 +330,7 @@ if (!empty($_POST['segmento_s'])) {
         [9,     5,      "N",    "",             "Nº sequencial do registro no lote"],
         [14,    1,      "A",    "S",            "Cód. segmento do registro detalhe"],
         [15,    1,      "A",    "Brancos",      "Reservado (uso Banco)"],
-        [16,    2,      "N",    "",             "Código de movimento remessa"]     
+        [16,    2,      "N",    "",             "Código de movimento remessa"]
     ];
 
     if (substr($_POST['segmento_s'], 18, 1) == '1') {
@@ -340,8 +344,7 @@ if (!empty($_POST['segmento_s'])) {
         foreach ($dadosCondicionais as $linhaDadosCondicionais) {
             array_push($dados, $linhaDadosCondicionais);
         }
-        
-    }else if(substr($_POST['segmento_s'], 18, 1) == '2'){
+    } else if (substr($_POST['segmento_s'], 18, 1) == '2') {
         $dadosCondicionais = [
             [18,    1,      "N",    "2",            "Identificação da impressão"],
             [19,    40,     "A",    "",             "Mensagem 5"],
@@ -374,7 +377,7 @@ if (!empty($_POST['segmento_s'])) {
 <body>
     <div class="slick-carousel">
         <div class="container">
-            <h1>Santander v4 - Header/Trailer Remessa</h1>
+            <h1>Header/Trailer Remessa</h1>
             <form action="santander_v4.php" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <label class="col-md-2" align="left" for="header">Header Arquivo</label>
@@ -396,7 +399,7 @@ if (!empty($_POST['segmento_s'])) {
             </form>
         </div>
         <div class="container">
-            <h1>Santander v4 - Remessa</h1>
+            <h1>Remessa</h1>
             <form action="santander_v4.php" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="segmento_p">Segmento P</label>
@@ -418,7 +421,7 @@ if (!empty($_POST['segmento_s'])) {
             </form>
         </div>
         <div class="container">
-            <h1>Santander v4 - Retorno</h1>
+            <h1>Retorno</h1>
             <form action="santander_v4.php" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="segmento_t">Segmento T</label>
@@ -501,7 +504,6 @@ if (!empty($_POST['segmento_s'])) {
 <script>
     $(document).ready(function() {
         $('.tabelas').slick({
-            dots: true,
             infinite: true,
             speed: 300,
             prevArrow: '<button type="button" class="slick-prev">Previous</button>',
@@ -513,7 +515,6 @@ if (!empty($_POST['segmento_s'])) {
 
     $(document).ready(function() {
         $('.slick-carousel').slick({
-            dots: false,
             infinite: true,
             speed: 300,
             prevArrow: '<button type="button" class="slick-prev">Previous</button>',
@@ -547,6 +548,7 @@ if (!empty($_POST['segmento_s'])) {
         transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     }
 
+
     input[type="text"]:focus {
         outline: none;
         border-color: #4d90fe;
@@ -557,9 +559,7 @@ if (!empty($_POST['segmento_s'])) {
         width: 45%;
         height: 400px;
         margin: 20px auto;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    }
+        border-radius: 15px;    }
 
     input {
         width: 70%;
@@ -604,9 +604,8 @@ if (!empty($_POST['segmento_s'])) {
 
     .container {
         width: 45%;
-        background-color: #f9f9f9;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        background-color: #DEDEDE;
+        border-radius: 15px;
     }
 
     h1 {
@@ -641,10 +640,6 @@ if (!empty($_POST['segmento_s'])) {
         background-color: #3e8e41;
     }
 
-    body {
-        background-color: red;
-    }
-
     .result {
         height: auto;
         margin: auto;
@@ -657,6 +652,11 @@ if (!empty($_POST['segmento_s'])) {
 
     .erro {
         background-color: #E9967A;
+    }
+
+    .slick-prev.slick-arrow:before,
+    .slick-next.slick-arrow::before {
+        color: black;
     }
 </style>
 
