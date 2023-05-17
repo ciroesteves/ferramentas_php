@@ -2,9 +2,7 @@
 include_once "menu.php";
 
 $strTableHeader             = $strTableHeaderLote   = $strTableTrailer          =
-    $strTableTrailerLote    = $strTableP            = $strTableQ                =
-    $strTableR              = $strTableS            =  $strTableT               =
-    $strTableU              =  '';
+    $strTableTrailerLote    = '';
 
 function campoNumerico($trecho, $padrao)
 {
@@ -103,18 +101,31 @@ if (!empty($_POST['header'])) {
 }
 if (!empty($_POST['header_lote'])) {
     $dados = [
+        [1,     1,      "N",    "0",                "IDENTIFICAÇÃO DO REGISTRO HEADER"],
+        [2,     1,      "N",    "1",                "TIPO DE OPERAÇÃO - REMESSA"],
+        [3,     7,      "A",    "REMESSA",          "IDENTIFICAÇÃO POR EXTENSO DO MOVIMENTO "],
+        [10,    2,      "N",    "01",               "IDENTIFICAÇÃO DO TIPO DE SERVIÇO"],
+        [12,    15,     "A",    "COBRANCA",         "IDENTIFICAÇÃO POR EXTENSO DO TIPO DE SERVIÇO "],
+        [27,    4,      "N",    "",                 "AGÊNCIA MANTENEDORA DA CONTA"],
+        [31,    2,      "N",    "00",               "COMPLEMENTO DE REGISTRO "],
+        [33,    5,      "N",    "",                 "NÚMERO DA CONTA CORRENTE DA EMPRESA"],
+        [38,    1,      "N",    "",                 "DÍGITO DE AUTO CONFERÊNCIA AG/CONTA EMPRESA"],
+        [39,    8,      "A",    "Brancos",          "COMPLEMENTO DO REGISTRO"],
+        [47,    30,     "A",    "",                 "NOME POR EXTENSO DA EMPRESA MÃE "],
+        [77,    3,      "N",    "341",              "Nº DO BANCO NA CÂMARA DE COMPENSAÇÃO "],
+        [80,    15,     "A",    "BANCO ITAU SA",    "NOME POR EXTENSO DO BANCO COBRADOR "],
+        [95,    6,      "N",    "DDMMAA",           "DATA DE GERAÇÃO DO ARQUIVO"],
+        [101,   294,    "A",    "Brancos",          "COMPLEMENTO DO REGISTRO"],
+        [395,   6,      "N",    "000001",           "NÚMERO SEQÜENCIAL DO REGISTRO NO ARQUIVO"]
     ];
 
     $strTableHeaderLote = geraTabela($dados, $_POST['header_lote']);
 }
-if (!empty($_POST['trailer_lote'])) {
-    $dados = [
-    ];
-
-    $strTableTrailerLote = geraTabela($dados, $_POST['trailer_lote']);
-}
 if (!empty($_POST['trailer'])) {
     $dados = [
+        [1,     1,      "N",    "9",          "IDENTIFICAÇÃO DO REGISTRO TRAILER"],
+        [2,   393,      "A",    "Brancos",    "COMPLEMENTO DO REGISTRO"],
+        [395,   6,      "N",    "",           "NÚMERO SEQÜENCIAL DO REGISTRO NO ARQUIVO"]
     ];
 
     $strTableTrailer = geraTabela($dados, $_POST['trailer']);
