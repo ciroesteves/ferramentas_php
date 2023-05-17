@@ -1,8 +1,7 @@
 <?php
 include_once "menu.php";
 
-$strTableHeader             = $strTableHeaderLote   = $strTableTrailer          =
-    $strTableTrailerLote    = '';
+$strTableHeader     = $strTableDetalhe      = $strTableTrailer      = '';
 
 function campoNumerico($trecho, $padrao)
 {
@@ -99,27 +98,57 @@ if (!empty($_POST['header'])) {
 
     $strTableHeader = geraTabela($dados, $_POST['header']);
 }
-if (!empty($_POST['header_lote'])) {
+if (!empty($_POST['detalhe'])) {
     $dados = [
-        [1,     1,      "N",    "0",                "IDENTIFICAÇÃO DO REGISTRO HEADER"],
-        [2,     1,      "N",    "1",                "TIPO DE OPERAÇÃO - REMESSA"],
-        [3,     7,      "A",    "REMESSA",          "IDENTIFICAÇÃO POR EXTENSO DO MOVIMENTO "],
-        [10,    2,      "N",    "01",               "IDENTIFICAÇÃO DO TIPO DE SERVIÇO"],
-        [12,    15,     "A",    "COBRANCA",         "IDENTIFICAÇÃO POR EXTENSO DO TIPO DE SERVIÇO "],
-        [27,    4,      "N",    "",                 "AGÊNCIA MANTENEDORA DA CONTA"],
-        [31,    2,      "N",    "00",               "COMPLEMENTO DE REGISTRO "],
-        [33,    5,      "N",    "",                 "NÚMERO DA CONTA CORRENTE DA EMPRESA"],
-        [38,    1,      "N",    "",                 "DÍGITO DE AUTO CONFERÊNCIA AG/CONTA EMPRESA"],
-        [39,    8,      "A",    "Brancos",          "COMPLEMENTO DO REGISTRO"],
-        [47,    30,     "A",    "",                 "NOME POR EXTENSO DA EMPRESA MÃE "],
-        [77,    3,      "N",    "341",              "Nº DO BANCO NA CÂMARA DE COMPENSAÇÃO "],
-        [80,    15,     "A",    "BANCO ITAU SA",    "NOME POR EXTENSO DO BANCO COBRADOR "],
-        [95,    6,      "N",    "DDMMAA",           "DATA DE GERAÇÃO DO ARQUIVO"],
-        [101,   294,    "A",    "Brancos",          "COMPLEMENTO DO REGISTRO"],
-        [395,   6,      "N",    "000001",           "NÚMERO SEQÜENCIAL DO REGISTRO NO ARQUIVO"]
+        [1,     1,      "N",    "1",                "IDENTIFICAÇÃO DO REGISTRO TRANSAÇÃO"],
+        [2,     2,      "N",    "",                 "TIPO DE INSCRIÇÃO DA EMPRESA"],
+        [4,     14,     "N",    "",                 "Nº DE INSCRIÇÃO DA EMPRESA (CPF/CNPJ)"],
+        [18,    4,      "N",    "",                 "AGÊNCIA MANTENEDORA DA CONTA"],
+        [22,    2,      "N",    "00",               "COMPLEMENTO DE REGISTRO"],
+        [24,    5,      "N",    "",                 "COMPLEMENTO DE REGISTRO"],
+        [29,    1,      "N",    "",                 "DÍGITO DE AUTO CONFERÊNCIA AG/CONTA EMPRESA"],
+        [30,    4,      "A",    "Brancos",          "COMPLEMENTO DE REGISTRO"],
+        [34,    4,      "N",    "",                 "CÓD.INSTRUÇÃO/ALEGAÇÃO A SER CANCELADA"],
+        [38,    25,     "A",    "",                 "IDENTIFICAÇÃO DO TÍTULO NA EMPRESA"],
+        [63,    8,      "N",    "",                 "IDENTIFICAÇÃO DO TÍTULO NO BANCO"],
+        [71,    13,     "N",    "",                 "QUANTIDADE DE MOEDA VARIÁVEL"],
+        [84,    3,      "N",    "",                 "NÚMERO DA CARTEIRA NO BANCO"],
+        [87,    21,     "A",    "",                 "IDENTIFICAÇÃO DA OPERAÇÃO NO BANCO"],
+        [108,   1,      "A",    "",                 "CÓDIGO DA CARTEIRA"],
+        [109,   2,      "N",    "",                 "IDENTIFICAÇÃO DA OCORRÊNCIA"],
+        [111,   10,     "A",    "",                 "Nº DO DOCUMENTO DE COBRANÇA (DUPL.,NP ETC.)"],
+        [121,   6,      "N",    "DDMMAA",           "DATA DE VENCIMENTO DO TÍTULO"],
+        [127,   13,     "N",    "",                 "VALOR NOMINAL DO TÍTULO"],
+        [140,   3,      "N",    "341",              "Nº DO BANCO NA CÂMARA DE COMPENSAÇÃO"],
+        [143,   5,      "N",    "",                 "AGÊNCIA ONDE O TÍTULO SERÁ COBRADO"],
+        [148,   2,      "A",    "",                 "ESPÉCIE DO TÍTULO"],
+        [150,   1,      "A",    "",                 "IDENTIFICAÇÃO DE TÍTULO ACEITO OU NÃO ACEITO"],
+        [151,   6,      "N",    "DDMMAA",          "DATA DA EMISSÃO DO TÍTULO"],
+        [157,   2,      "A",    "",                 "1ª INSTRUÇÃO DE COBRANÇA"],
+        [159,   2,      "A",    "",                 "2ª INSTRUÇÃO DE COBRANÇA"],
+        [161,   13,     "N",    "",                 "VALOR DE MORA POR DIA DE ATRASO"],
+        [174,   6,      "N",    "DDMMAA",          "DATA LIMITE PARA CONCESSÃO DE DESCONTO"],
+        [180,   13,     "N",    "",                 "VALOR DO DESCONTO A SER CONCEDIDO"],
+        [193,   13,     "N",    "",                 "VALOR DO I.O.F. RECOLHIDO P/ NOTAS SEGURO"],
+        [206,   13,     "N",    "",                 "VALOR DO ABATIMENTO A SER CONCEDIDO"],
+        [219,   2,      "N",    "",                 "IDENTIFICAÇÃO DO TIPO DE INSCRIÇÃO/PAGADOR"],
+        [221,   14,     "N",    "",                 "Nº DE INSCRIÇÃO DO PAGADOR (CPF/CNPJ)"],
+        [235,   30,     "A",    "",                 "NOME DO PAGADOR"],
+        [265,   10,     "A",    "Brancos",          "COMPLEMENTO DE REGISTRO"],
+        [275,   40,     "A",    "",                 "RUA, NÚMERO E COMPLEMENTO DO PAGADOR"],
+        [315,   12,     "A",    "",                 "BAIRRO DO PAGADOR"],
+        [327,   8,      "N",    "",                 "CEP DO PAGADOR"],
+        [335,   15,     "A",    "",                 "CIDADE DO PAGADOR"],
+        [350,   2,      "A",    "",                 "UF DO PAGADOR "],
+        [352,   30,     "A",    "",                 "NOME DO SACADOR OU AVALISTA"],
+        [382,   4,      "A",    "Brancos",          "COMPLEMENTO DE REGISTRO"],
+        [386,   6,      "N",    "DDMMAA",           "DATA DE MORA"],
+        [392,   2,      "N",    "",                 "QUANTIDADE DE DIAS"],
+        [394,   1,      "A",    "Brancos",          "COMPLEMENTO DE REGISTRO"],
+        [395,   6,      "N",    "",                 "Nº SEQÜENCIAL DO REGISTRO NO ARQUIVO"]
     ];
 
-    $strTableHeaderLote = geraTabela($dados, $_POST['header_lote']);
+    $strTableDetalhe = geraTabela($dados, $_POST['detalhe']);
 }
 if (!empty($_POST['trailer'])) {
     $dados = [
@@ -146,23 +175,19 @@ if (!empty($_POST['trailer'])) {
     
     <div class="slick-carousel">
         <div class="container">
-            <h1>Header/Trailer Remessa</h1>
+            <h1>Remessa</h1>
             <form action="itau_400.php" method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <label class="col-md-2" align="left" for="header">Header Arquivo</label>
-                    <input class="col-md-6" type="text" id="header" name="header" maxlength="240">
+                    <input class="col-md-6" type="text" id="header" name="header" maxlength="400">
                 </div>
                 <div class="form-group">
-                    <label class="col-md-2" align="left" for="header_lote">Header Lote</label>
-                    <input class="col-md-6" type="text" id="header_lote" name="header_lote" maxlength="240">
-                </div>
-                <div class="form-group row">
-                    <label class="col-md-2" align="left" for="trailer_lote">Trailer Lote</label>
-                    <input class="col-md-6" type="text" id="trailer_lote" name="trailer_lote" maxlength="240">
+                    <label class="col-md-2" align="left" for="detalhe">Detalhe</label>
+                    <input class="col-md-6" type="text" id="detalhe" name="detalhe" maxlength="400">
                 </div>
                 <div class="form-group">
                     <label class="col-md-2" align="left" for="trailer">Trailer Arquivo</label>
-                    <input class="col-md-6" type="text" id="trailer" name="trailer" maxlength="240">
+                    <input class="col-md-6" type="text" id="trailer" name="trailer" maxlength="400">
                 </div>
                 <input type="submit" value="Validar">
             </form>
@@ -176,16 +201,10 @@ if (!empty($_POST['trailer'])) {
                         {$strTableHeader}
                     </div>";
         }
-        if (!empty($_POST['header_lote'])) {
+        if (!empty($_POST['detalhe'])) {
             echo "  <div class='container result'>
-                        <h1>Header Lote</h1>
-                        {$strTableHeaderLote}
-                    </div>";
-        }
-        if (!empty($_POST['trailer_lote'])) {
-            echo "  <div class='container result'>
-                        <h1>Trailer Lote</h1>
-                        {$strTableTrailerLote}
+                        <h1>Detalhe</h1>
+                        {$strTableDetalhe}
                     </div>";
         }
         if (!empty($_POST['trailer'])) {
