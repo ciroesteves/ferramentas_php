@@ -25,9 +25,9 @@ function campoBrancos($trecho, $padrao)
 function campoValidaComPadrao($trecho, $padrao)
 {
     if (!empty(trim($padrao))) {
-        if ($trecho == $padrao) {
+        if (trim($trecho) == $padrao) {
             return "OK";
-        } else if (($padrao == "DDMMAAAA" || $padrao == "Nosso Número" || $padrao == "Seu Número")) {
+        } else if (($padrao == "DDMMAA")) {
             return "";
         } else {
             return "ERRO";
@@ -80,23 +80,22 @@ function geraTabela($dados, $linha)
 
 if (!empty($_POST['header'])) {
     $dados = [
-        [1,     3,      "N",    "033",      "Código do Banco na compensação"],
-        [4,     4,      "N",    "0000",     "Lote de serviço "],
-        [8,     1,      "N",    "0",        "Tipo de registro"],
-        [9,     8,      "A",    "",         "Reservado (uso do banco)"],
-        [17,    1,      "N",    "",         "Tipo de inscrição da empresa"],
-        [18,    15,     "N",    "",         "Número de inscrição da empresa"],
-        [33,    15,     "N",    "",         "Código de transmissão"],
-        [48,    25,     "A",    "Brancos",  "Reservado (uso do banco)"],
-        [73,    30,     "A",    "",         "Nome da empresa"],
-        [103,   30,     "A",    "Banco Santander",  "Nome do Banco"],
-        [133,   10,     "A",    "Brancos",          "Reservado (uso do banco)"],
-        [143,   1,      "N",    "1",                "Código Remessa"],
-        [144,   8,      "N",    "DDMMAAAA",         "Data da geração do arquivo"],
-        [152,   6,      "A",    "Brancos",          "Reservado (uso do banco)"],
-        [158,   6,      "N",    "",                 "Número sequencial do arquivo"],
-        [164,   3,      "N",    "040",              "Versão do layout do arquivo"],
-        [167,   74,     "A",    "Brancos",          "Reservado (uso do banco)"]
+        [1,     1,      "N",    "0",                "IDENTIFICAÇÃO DO REGISTRO HEADER"],
+        [2,     1,      "N",    "1",                "TIPO DE OPERAÇÃO - REMESSA"],
+        [3,     7,      "A",    "REMESSA",          "IDENTIFICAÇÃO POR EXTENSO DO MOVIMENTO "],
+        [10,    2,      "N",    "01",               "IDENTIFICAÇÃO DO TIPO DE SERVIÇO"],
+        [12,    15,     "A",    "COBRANCA",         "IDENTIFICAÇÃO POR EXTENSO DO TIPO DE SERVIÇO "],
+        [27,    4,      "N",    "",                 "AGÊNCIA MANTENEDORA DA CONTA"],
+        [31,    2,      "N",    "00",               "COMPLEMENTO DE REGISTRO "],
+        [33,    5,      "N",    "",                 "NÚMERO DA CONTA CORRENTE DA EMPRESA"],
+        [38,    1,      "N",    "",                 "DÍGITO DE AUTO CONFERÊNCIA AG/CONTA EMPRESA"],
+        [39,    8,      "A",    "",                 "COMPLEMENTO DO REGISTRO"],
+        [47,    30,     "A",    "",                 "NOME POR EXTENSO DA EMPRESA MÃE "],
+        [77,    3,      "N",    "341",              "Nº DO BANCO NA CÂMARA DE COMPENSAÇÃO "],
+        [80,    15,     "A",    "BANCO ITAU SA",    "NOME POR EXTENSO DO BANCO COBRADOR "],
+        [95,    6,      "N",    "DDMMAA",           "DATA DE GERAÇÃO DO ARQUIVO"],
+        [101,   294,    "A",    "",                 "COMPLEMENTO DO REGISTRO"],
+        [395,   6,      "N",    "000001",           "NÚMERO SEQÜENCIAL DO REGISTRO NO ARQUIVO"]
 
     ];
 
@@ -104,50 +103,18 @@ if (!empty($_POST['header'])) {
 }
 if (!empty($_POST['header_lote'])) {
     $dados = [
-        [1,     3,      "N",    "033",      "Código do Banco na compensação"],
-        [4,     4,      "N",    "",         "Número do lote de serviço "],
-        [8,     1,      "N",    "1",        "Tipo de registro"],
-        [9,     1,      "A",    "R",        "Tipo de operação"],
-        [10,    2,      "N",    "01",       "Tipo de serviço"],
-        [12,    2,      "A",    "Brancos",  "Reservado (uso do banco)"],
-        [14,    3,      "N",    "040",      "Nº da versão do layout do lote"],
-        [17,    1,      "A",    "Brancos",  "Reservado (uso do banco)"],
-        [18,    1,      "N",    "",         "Tipo de inscrição da empresa"],
-        [19,    15,     "N",    "",         "Nº de inscrição da empresa"],
-        [34,    20,     "A",    "Brancos",  "Reservado (uso do banco)"],
-        [54,    15,     "N",    "",         "Código de transmissão"],
-        [69,    5,      "A",    "Brancos",  "Reservado (uso do banco)"],
-        [74,    30,     "A",    "",         "Nome do beneficiário"],
-        [104,   40,     "A",    "",         "Mensagem 1"],
-        [144,   40,     "A",    "",         "Mensagem 2"],
-        [184,   8,      "N",    "",         "Número remessa"],
-        [192,   8,      "N",    "DDMMAAAA", "Data da gravação da remessa"],
-        [200,   41,     "A",    "Brancos",  "Reservado (uso do banco)"]
     ];
 
     $strTableHeaderLote = geraTabela($dados, $_POST['header_lote']);
 }
 if (!empty($_POST['trailer_lote'])) {
     $dados = [
-        [1,     3,      "N",    "033",      "Código do Banco na compensação"],
-        [4,     4,      "N",    "",         "Número do lote de remessa"],
-        [8,     1,      "N",    "5",        "Tipo de registro"],
-        [9,     9,      "A",    "Brancos",  "Reservado (uso do banco)"],
-        [18,    6,      "N",    "",         "Quantidade de registros do lote"],
-        [24,    217,    "A",    "Brancos",  "Reservado (uso do banco)"]
     ];
 
     $strTableTrailerLote = geraTabela($dados, $_POST['trailer_lote']);
 }
 if (!empty($_POST['trailer'])) {
     $dados = [
-        [1,     3,      "N",    "033",      "Código do Banco na compensação"],
-        [4,     4,      "N",    "",         "Número da remessa"],
-        [8,     1,      "N",    "9",        "Tipo de registro"],
-        [9,     9,      "A",    "Brancos",  "Reservado (uso do banco)"],
-        [18,    6,      "N",    "",         "Quantidade de lotes do arquivo"],
-        [24,    6,      "N",    "",         "Quantidade de registros do arquivo"],
-        [30,    211,    "A",    "Brancos",  "Reservado (uso do banco)"]
     ];
 
     $strTableTrailer = geraTabela($dados, $_POST['trailer']);
