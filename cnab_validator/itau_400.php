@@ -98,7 +98,7 @@ if (!empty($_POST['header'])) {
 
     $strTableHeader = geraTabela($dados, $_POST['header']);
 }
-if (!empty($_POST['detalhe'])) {
+if (!empty($_POST['detalhe_remessa'])) {
     $dados = [
         [1,     1,      "N",    "1",                "IDENTIFICAÇÃO DO REGISTRO TRANSAÇÃO"],
         [2,     2,      "N",    "",                 "TIPO DE INSCRIÇÃO DA EMPRESA"],
@@ -148,7 +148,7 @@ if (!empty($_POST['detalhe'])) {
         [395,   6,      "N",    "",                 "Nº SEQÜENCIAL DO REGISTRO NO ARQUIVO"]
     ];
 
-    $strTableDetalhe = geraTabela($dados, $_POST['detalhe']);
+    $strTableDetalhe = geraTabela($dados, $_POST['detalhe_remessa']);
 }
 if (!empty($_POST['trailer'])) {
     $dados = [
@@ -158,6 +158,59 @@ if (!empty($_POST['trailer'])) {
     ];
 
     $strTableTrailer = geraTabela($dados, $_POST['trailer']);
+}
+if (!empty($_POST['detalhe_retorno'])) {
+    $dados = [
+        [1,     1,      "N",    "1",            "IDENTIFICAÇÃO DO REGISTRO TRANSAÇÃO"],
+        [2,     2,      "N",    "",             "IDENTIFICAÇÃO DO TIPO DE INSCRIÇÃO/EMPRESA"],
+        [4,     14,     "N",    "",             "NÚMERO DE INSCRIÇÃO DA EMPRESA (CPF/CNPJ"],
+        [18,    4,      "N",    "",             "AGÊNCIA MANTENEDORA DA CONTA"],
+        [22,    2,      "N",    "00",           "COMPLEMENTO DE REGISTRO"],
+        [24,    5,      "N",    "",             "NÚMERO DA CONTA CORRENTE DA EMPRESA"],
+        [29,    1,      "N",    "",             "DÍGITO DE AUTO CONFERÊNCIA AG/CONTA EMPRESA"],
+        [30,    8,      "A",    "Brancos",      "COMPLEMENTO DE REGISTRO"],
+        [38,    25,     "A",    "",             "IDENTIFICAÇÃO DO TÍTULO NA EMPRESA"],
+        [63,    8,      "N",    "",             "IDENTIFICAÇÃO DO TÍTULO NO BANCO"],
+        [71,    12,     "A",    "Brancos",      "COMPLEMENTO DO REGISTRO"],
+        [83,    3,      "N",    "",             "NUMERO DA CARTEIRA"],
+        [86,    8,      "N",    "",             "IDENTIFICAÇÃO DO TÍTULO NO BANCO"],
+        [94,    1,      "N",    "",             "DAC DO NOSSO NÚMERO"],
+        [95,    13,     "A",    "Brancos",      "COMPLEMENTO DO REGISTRO"],
+        [108,   1,      "A",    "",             "CÓDIGO DA CARTEIRA"],
+        [109,   2,      "N",    "",             "IDENTIFICAÇÃO DA OCORRÊNCIA"],
+        [111,   6,      "N",    "DDMMAA",       "DATA DE OCORRÊNCIA NO BANCO"],
+        [117,   10,     "A",    "",             "Nº DO DOCUMENTO DE COBRANÇA (DUPL, NP ETC)"],
+        [127,   8,      "N",    "",             "CONFIRMAÇÃO DO NÚMERO DO TÍTULO NO BANCO"],
+        [135,   12,     "A",    "Brancos",      "COMPLEMENTO DO REGISTRO"],
+        [147,   6,      "N",    "DDMMAA",       "DATA DE VENCIMENTO DO TÍTULO"],
+        [153,   13,     "N",    "",             "VALOR NOMINAL DO TÍTULO "],
+        [166,   3,      "N",    "",             "NÚMERO DO BANCO NA CÂMARA DE COMPENSAÇÃO"],
+        [169,   4,      "N",    "",             "AG. COBRADORA, AG. DE LIQUIDAÇÃO OU BAIXA"],
+        [173,   1,      "N",    "",             "DAC DA AGÊNCIA COBRADORA"],
+        [174,   2,      "N",    "",             "ESPÉCIE DO TÍTULO"],
+        [176,   13,     "N",    "",             "VALOR DA DESPESA DE COBRANÇA"],
+        [189,   26,     "A",    "Brancos",      "COMPLEMENTO DO REGISTRO"],
+        [215,   13,     "N",    "",             "VALOR DO IOF A SER RECOLHIDO (NOTAS SEGURO)"],
+        [228,   13,     "N",    "",             "VALOR DO ABATIMENTO CONCEDIDO"],
+        [241,   13,     "N",    "",             "VALOR DO DESCONTO CONCEDIDO"],
+        [254,   13,     "N",    "",             "VALOR LANÇADO EM CONTA CORRENTE"],
+        [267,   13,     "N",    "",             "VALOR DE MORA E MULTA"],
+        [280,   13,     "N",    "",             "VALOR DE OUTROS CRÉDITOS"],
+        [293,   1,      "A",    "",             "INDICADOR DE BOLETO DDA"],
+        [294,   2,      "A",    "Brancos",      "COMPLEMENTO DO REGISTRO"],
+        [296,   6,      "N",    "DDMMAA",       "DATA DE CRÉDITO DESTA LIQUIDAÇÃO"],
+        [302,   4,      "N",    "",             "CÓDIGO DA INSTRUÇÃO CANCELADA"],
+        [306,   6,      "A",    "Brancos",      "COMPLEMENTO DE REGISTRO"],
+        [312,   13,     "N",    "Zeros",        "COMPLEMENTO DE REGISTRO"],
+        [325,   30,     "A",    "",             "NOME DO PAGADOR"],
+        [355,   23,     "A",    "Brancos",      "COMPLEMENTO DO REGISTRO"],
+        [378,   8,      "A",    "",             "REGISTROS REJEITADOS OU ALEGAÇÃO DO PAGADOR OU REGISTRO DE MENSAGEM INFORMATIVA"],
+        [386,   7,      "A",    "Brancos",      "COMPLEMENTO DO REGISTRO "],
+        [393,   3,      "A",    "",             "MEIO PELO QUAL O TÍTULO FOI LIQUIDADO"],
+        [395,   6,      "N",    "",             "NÚMERO SEQÜENCIAL DO REGISTRO NO ARQUIVO"]
+    ];
+
+    $strTableDetalheRet = geraTabela($dados, $_POST['detalhe_retorno']);
 }
 ?>
 <html>
@@ -182,12 +235,22 @@ if (!empty($_POST['trailer'])) {
                     <input class="col-md-6" type="text" id="header" name="header" maxlength="400">
                 </div>
                 <div class="form-group">
-                    <label class="col-md-2" align="left" for="detalhe">Detalhe</label>
-                    <input class="col-md-6" type="text" id="detalhe" name="detalhe" maxlength="400">
+                    <label class="col-md-2" align="left" for="detalhe_remessa">Detalhe</label>
+                    <input class="col-md-6" type="text" id="detalhe_remessa" name="detalhe_remessa" maxlength="400">
                 </div>
                 <div class="form-group">
                     <label class="col-md-2" align="left" for="trailer">Trailer Arquivo</label>
                     <input class="col-md-6" type="text" id="trailer" name="trailer" maxlength="400">
+                </div>
+                <input type="submit" value="Validar">
+            </form>
+        </div>
+        <div class="container">
+            <h1>Retorno</h1>
+            <form action="itau_400.php" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label class="col-md-2" align="left" for="detalhe_retorno">Detalhe</label>
+                    <input class="col-md-6" type="text" id="detalhe_retorno" name="detalhe_retorno" maxlength="400">
                 </div>
                 <input type="submit" value="Validar">
             </form>
@@ -201,7 +264,7 @@ if (!empty($_POST['trailer'])) {
                         {$strTableHeader}
                     </div>";
         }
-        if (!empty($_POST['detalhe'])) {
+        if (!empty($_POST['detalhe_remessa'])) {
             echo "  <div class='container result'>
                         <h1>Detalhe</h1>
                         {$strTableDetalhe}
@@ -211,6 +274,12 @@ if (!empty($_POST['trailer'])) {
             echo "  <div class='container result'>
                         <h1>Trailer</h1>
                         {$strTableTrailer}
+                    </div>";
+        }
+        if (!empty($_POST['detalhe_retorno'])) {
+            echo "  <div class='container result'>
+                        <h1>Detalhe</h1>
+                        {$strTableDetalheRet}
                     </div>";
         }
         ?>
