@@ -1,0 +1,10 @@
+[Sun May 09 15:36:56.2000] [error] [client 192.168.1.100] PHP Fatal error:  Call to undefined function foo() in /var/www/html/script.php on line 12
+[Sun May 09 15:36:56.2000] [error] [client 192.168.1.100] (13)Permission denied: access to /var/www/html/protected-file.html denied
+[Sun May 09 15:36:56.2000] [error] Syntax error on line 42 of /etc/apache2/sites-enabled/example.conf:Invalid command 'RewriteEngine', perhaps misspelled or defined by a module not included in the server configuration
+[Sun May 09 15:36:56.2000] [error] [client 192.168.1.100] user 'john' not found: /secure/
+[Sun May 09 15:36:56.2000] [error] [client 192.168.1.100] client denied by server configuration: /var/www/html/secure-page.html
+[Sun May 09 15:36:56.2000] [error] [client 192.168.1.100] PHP Warning:  Division by zero in /var/www/html/script.php on line 42
+[Sun May 09 15:36:56.2000] [error] [client 192.168.1.100] File does not exist: /var/www/html/page-not-found.html
+[Sun May 09 15:36:56.2000] [notice] Apache/2.4.38 (Ubuntu) configured -- resuming normal operations
+[Sun May 09 15:36:56.2000] [notice] proxy: client 192.168.1.100 requested URL http://example.com:80/; proxying to http://backend-server:8080/
+[Sun May 09 15:36:56.2000] [warn] [client 192.168.1.100] File does not exist: /var/www/html/missing-file.html
