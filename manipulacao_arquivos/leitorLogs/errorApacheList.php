@@ -9,13 +9,12 @@ function geraRelatorio($dados, $tipo)
 {
     $tabela = "<table> 
             <thead>
-                <tr><th width='200px'>Data/Hora</th><th width='100px'>Tipo</th><th width='500px'>Mensagem</th><th width='450px'>Arquivo</th><th width='100px'>Linha</th></tr>
+                <tr><th width='200px'>Data/Hora</th><th width='500px'>Mensagem</th><th width='450px'>Arquivo</th><th width='100px'>Linha</th></tr>
             </thead>";
     $tabela .= "<tbody'>";
     foreach ($dados as $dado) {
-        $tabela .= "<tr>
+        $tabela .= "<tr class='detalhes'>
     <td align='center'>{$dado['timestamp']}</td>
-    <td align='center'>{$dado['tipo']}</td>
     <td>{$dado['mensagem']}</td>
     <td>{$dado['arquivo']}</td>
     <td align='center'>{$dado['linha']}</td>
@@ -134,7 +133,7 @@ echo    "<h1>Relatório de Erros do Apache</h1>
         <div>
         <table>
             <thead>
-            <tr><th>Tipo</th><th>Quantidade</th><th>Data/Hora Último</th><th colspan='2'>Mensagem Completa</th></tr>
+            <tr><th>Tipo</th><th>Quantidade</th><th>Última Data/Hora</th><th colspan='2'>Última Mensagem</th></tr>
             </thead>
             <tbody>
             <tr><th><a href='#' onclick='verDetalhes({$detalhesErros})'>Fatal Errors</a></th><th>{$countErrors}</th><th>{$ultimoMensagemError['timestamp']}</th><th colspan='2'>{$ultimoMensagemError['mensagem']}" . " - " . "{$ultimoMensagemError['arquivo']}</th></tr>
@@ -180,7 +179,7 @@ echo    "<h1>Relatório de Erros do Apache</h1>
         background-color: #f2f2f2;
     }
 
-    tr:hover {
+    tr .detalhes:hover {
         background-color: #C0C0C0;
     }
 </style>
