@@ -121,3 +121,4 @@
 [Fri May 19 23:36:38.821795 2023] [php:warn] [pid 3480:tid 1868] [client ::1:62482] PHP Warning:  Undefined array key 3 in C:\\xampp\\htdocs\\ferramentas_php\\manipulacao_arquivos\\leitorLogs\\errorApacheList.php on line 15
 [Fri May 19 23:36:38.821795 2023] [php:warn] [pid 3480:tid 1868] [client ::1:62482] PHP Warning:  Undefined array key 3 in C:\\xampp\\htdocs\\ferramentas_php\\manipulacao_arquivos\\leitorLogs\\errorApacheList.php on line 15
 [Fri May 19 23:36:38.821795 2023] [php:warn] [pid 3480:tid 1868] [client ::1:62482] PHP Warning:  Undefined array key 3 in C:\\xampp\\htdocs\\ferramentas_php\\manipulacao_arquivos\\leitorLogs\\errorApacheList.php on line 15
+[Fri May 19 23:27:33.193050 2023] [php:warn] [pid 3480:tid 1876] [client ::1:62325] PHP Warning:  Undefined variable $mensagemErro in C:\\xampp\\htdocs\\ferramentas_php\\manipulacao_arquivos\\leitorLogs\\errorApacheList.php on line 37
