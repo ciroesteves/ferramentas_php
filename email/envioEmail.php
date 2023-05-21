@@ -1,9 +1,25 @@
 <?php
 require 'vendor/autoload.php';
-use Dotenv\Dotenv;
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
-$dotenv = Dotenv::createImmutable(__DIR__);
-$dotenv->load();
+$mail = new PHPMailer(true);
+
+$envFilePath = '.env';
+$envVariables = file($envFilePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+foreach ($envVariables as $line) {
+    if (strpos($line, '=') !== false) {
+        list($key, $value) = explode('=', $line, 2);
+        $key = trim($key);
+        $value = trim($value);
+
+        // Define a variável de ambiente somente se ela ainda não estiver definida
+        if (!getenv($key)) {
+            putenv("$key=$value");
+        }
+    }
+}
 
 // Configurações do servidor SMTP
 $smtpHost = getenv('SMTP_HOST');
@@ -11,20 +27,33 @@ $smtpPort = getenv('SMTP_PORT');
 $smtpUsername = getenv('SMTP_USERNAME');
 $smtpPassword = getenv('SMTP_PASSWORD');
 
-echo $smtpHost;
-/*
-// Use as variáveis para configurar o PHPMailer
-$mail->Host = $smtpHost;
-$mail->Port = $smtpPort;
-$mail->Username = $smtpUsername;
-$mail->Password = $smtpPassword;
 
-// Informações do remetente e destinatário
-$mail->setFrom('ciro.esteves@hotmail.com', 'Ciro');
-$mail->addAddress('ciro.esteves05@gmail.com', 'Ciro destino');
+try {
+    // Configurações do servidor SMTP
+    $mail->isSMTP();
+    $mail->Host = $smtpHost;
+    $mail->SMTPAuth = true;
+    $mail->Username = $smtpUsername;
+    $mail->Password = $smtpPassword;
+    $mail->SMTPSecure = 'tls';
+    $mail->Port = $smtpPort;
 
-// Assunto e corpo do e-mail
-$mail->Subject = 'Email de teste';
-$mail->Body = 'Estou realizando um teste.';
-*/
+    // Informações do remetente e destinatário
+    $mail->setFrom($smtpUsername, 'Ciro');
+    $mail->addAddress('ciro.esteves@hotmail.com', 'Nome do Destinatário');
+
+    // Assunto e corpo do e-mail
+    $mail->Subject = 'Assunto do E-mail';
+    $mail->Body = 'Corpo do E-mail';
+
+    // Configurar formato do e-mail
+    $mail->isHTML(true);
+
+    // Enviar o e-mail
+    $mail->send();
+    echo 'E-mail enviado com sucesso!';
+} catch (Exception $e) {
+    echo 'Erro ao enviar o e-mail: ' . $mail->ErrorInfo;
+}
+
 ?>
