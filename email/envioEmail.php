@@ -24,6 +24,7 @@ foreach ($envVariables as $line) {
 // Configurações do servidor SMTP
 $smtpHost = getenv('SMTP_HOST');
 $smtpPort = getenv('SMTP_PORT');
+$smtpSecure = getenv('SMTP_SECURE');
 $smtpUsername = getenv('SMTP_USERNAME');
 $smtpPassword = getenv('SMTP_PASSWORD');
 
@@ -35,7 +36,7 @@ try {
     $mail->SMTPAuth = true;
     $mail->Username = $smtpUsername;
     $mail->Password = $smtpPassword;
-    $mail->SMTPSecure = 'tls';
+    $mail->SMTPSecure = $smtpSecure;
     $mail->Port = $smtpPort;
 
     // Informações do remetente e destinatário
@@ -43,8 +44,8 @@ try {
     $mail->addAddress('ciro.esteves@hotmail.com', 'Nome do Destinatário');
 
     // Assunto e corpo do e-mail
-    $mail->Subject = 'Assunto do E-mail';
-    $mail->Body = 'Corpo do E-mail';
+    $mail->Subject = 'Assunto do E-mail de teste da ferramenta';
+    $mail->Body = 'Corpo do E-mail do SMPT 549658';
 
     // Configurar formato do e-mail
     $mail->isHTML(true);
