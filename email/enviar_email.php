@@ -38,18 +38,25 @@ try {
     $mail->Password = $smtpPassword;
     $mail->SMTPSecure = $smtpSecure;
     $mail->Port = $smtpPort;
+    $mail->CharSet = 'UTF-8';
 
     $subject = $_POST['assunto'];
     $body = $_POST['message'];
     $emailDestino = $_POST['email'];
+    $pdfFilePath = 'arquivo.pdf';
 
     // Informações do remetente e destinatário
     $mail->setFrom($smtpUsername, 'Ciro');
-    $mail->addAddress($emailDestino, 'Nome do Destinatário');
+    $mail->addAddress($emailDestino, 'Nome do Destinatario');
+    $mail->addBCC('ciro.esteves@hotmail.com', 'Ciro Oculto');
+    $mail->addReplyTo('ciro.esteves06@gmail.com', 'Nome do Responder');
 
     // Assunto e corpo do e-mail
     $mail->Subject = $subject;
     $mail->Body = $body;
+    
+    $mail->addAttachment($pdfFilePath, 'personalizado.pdf');
+
 
     // Configurar formato do e-mail
     $mail->isHTML(true);
