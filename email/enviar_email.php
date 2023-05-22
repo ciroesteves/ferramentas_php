@@ -39,13 +39,17 @@ try {
     $mail->SMTPSecure = $smtpSecure;
     $mail->Port = $smtpPort;
 
+    $subject = $_POST['assunto'];
+    $body = $_POST['message'];
+    $emailDestino = $_POST['email'];
+
     // Informações do remetente e destinatário
     $mail->setFrom($smtpUsername, 'Ciro');
-    $mail->addAddress('ciro.esteves@hotmail.com', 'Nome do Destinatário');
+    $mail->addAddress($emailDestino, 'Nome do Destinatário');
 
     // Assunto e corpo do e-mail
-    $mail->Subject = 'Assunto do E-mail de teste da ferramenta';
-    $mail->Body = 'Corpo do E-mail do SMPT 549658';
+    $mail->Subject = $subject;
+    $mail->Body = $body;
 
     // Configurar formato do e-mail
     $mail->isHTML(true);
